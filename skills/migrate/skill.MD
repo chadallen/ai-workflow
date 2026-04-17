@@ -1,217 +1,243 @@
 ---
 name: migrate
-description: Convert a project using the three-file documentation system (CLAUDE.md, PRD.md, plan.MD) to use beads for task tracking. One-time migration. Use when the user says "migrate to beads", "set up beads on this project", "convert this to beads workflow", or types /migrate-to-beads.
+description: Sets up the three-file plus beads workflow on any project. Detects what already exists and skips it — works on greenfield projects, partially set up projects, and projects with existing docs. One-time setup per project.
+disable-model-invocation: true
+allowed-tools: Bash, Read, Write
 ---
 
-# Migrate to Beads
+# Migrate
 
-One-time migration that moves a project from markdown-only task tracking to beads-based task tracking. After this runs, plan.MD's "What Remains" content is managed by beads, and `/start-session`, `/end-session`, `/plan-to-epic`, and `/epic-executor` become functional.
+Sets up the complete workflow on any project: CLAUDE.md, PRD.md, plan.MD, docs/adr/, docs/plans/, beads, and Claude Code hooks. Detects what already exists and skips it. Constructs what's missing.
 
 Do NOT write any application code during this migration.
 
-## Step 1: Verify prerequisites
+---
 
-Check:
+## Step 1: Cost warning and inventory
 
-- `beads` is installed: run `bd version`. If not, stop — the user needs to install it first.
-- Repo has CLAUDE.md, PRD.md, and plan.MD (any casing variant). If not, stop — this project isn't on the three-file system yet.
+**If docs are sparse or missing, warn the user:**
 
-## Step 2: Read current state
+> This migration may consume significant tokens if documentation is sparse — I'll need to read code to infer the project's architecture, conventions, and current state. If you have existing planning docs or can describe the project and current status briefly, that's much cheaper than reading code.
 
-Read CLAUDE.md, PRD.md, and plan.MD in full. From plan.MD, focus on:
+Then ask:
+1. Do you have any existing planning or spec documents? (README, design docs, specs — list paths if yes)
+2. Can you briefly describe what the project is, what's built, and what's planned next?
+3. How large is the codebase? (rough file count or small/medium/large)
 
-- "What Remains" section (the task list to migrate).
-- "Overall Plan" section (identifies active phase or milestone).
-- Any tasks already in progress or blocked.
+Wait for answers before reading any code. A verbal description from the user is almost always cheaper than reading files.
 
-From PRD.md, note any dependencies or sequencing info that informs task dependencies.
+**Inventory what exists:**
 
-## Step 3: Initialize beads
+Check for each of the following and note present/missing:
 
-If `.beads/` doesn't exist:
+- `CLAUDE.md` (or `Claude.MD`)
+- `PRD.md` (or `PRD.MD`)
+- `plan.MD` (or `plan.md`)
+- `docs/adr/` directory
+- `docs/plans/` directory
+- `.beads/` directory
+- `.claude/` settings with beads hooks
 
-```
-bd init --quiet
-```
+If everything exists and beads is initialized, this project may already be migrated. Confirm with the user before proceeding.
 
-Beads will use a default prefix (typically `bd`). If the user wants a project-specific prefix (e.g., `enzo-1` instead of `bd-1`), they can configure it after init via `bd config`.
+---
 
-## Step 4: Install Claude Code integration
+## Step 2: Verify prerequisites
 
-```
-bd setup claude
-```
+- `bd version` — beads must be installed. If not, stop and tell the user to install it first.
+- `git status` — must be in a git repo. If not, stop.
+- Working tree should be clean. If not, stop and ask the user what to do with uncommitted work.
 
-This installs two hooks:
-- `SessionStart` → runs `bd prime` (injects ~1-2k tokens of beads context at session start)
-- `PreCompact` → runs `bd sync` (saves work to git before context compaction)
+---
 
-Verify: `bd setup claude --check`
+## Step 3: Build CLAUDE.md (if missing)
 
-## Step 5: Propose epic structure
+If CLAUDE.md exists, read it. Check for content that doesn't belong — progress tracking, build status, session history — and migrate it to plan.MD (Step 5), then remove it from CLAUDE.md.
 
-Analyze plan.MD and propose:
+If CLAUDE.md doesn't exist, construct it from available sources: existing README, package files (package.json, go.mod, Cargo.toml, pyproject.toml, etc.), and user description. Read code only if necessary and only after asking.
 
-- One epic per active phase/milestone from Overall Plan.
-- Tasks derived from What Remains, grouped by epic.
-- Inferred dependencies based on file overlap or explicit ordering.
+CLAUDE.md must contain:
+- Project description (1 paragraph)
+- Stack and key dependencies
+- Build, test, and run commands
+- Project structure overview
+- Coding conventions and patterns (infer from existing code if needed)
+- Secrets and environment variable policy
+- Standing behavioral instructions for the agent:
+  - Wait for approval before writing code
+  - Commit frequently with task IDs in parens: `git commit -m "<message> (<task-id>)"`
+  - Prompt the user when manual testing or decisions are needed
+  - Do not read scratch.md
 
-Show the user the proposed structure. Example:
-
-```
-Proposed epics:
-- Phase 6 — Strava OAuth (3 tasks)
-- Phase 7 — Historical sync Phase 1 (5 tasks)
-
-Phase 6 tasks:
-  1. Set up OAuth credential flow [depends on: none]
-  2. Handle token refresh [depends on: 1]
-  3. Store tokens in Keychain [depends on: 1]
-
-Phase 7 tasks:
-  ...
-
-Proceed with this structure?
-```
-
-Wait for approval. Iterate if the user wants changes.
-
-## Step 6: Create epics and tasks
-
-For each approved epic:
-
-```
-bd create "<Epic Title>" -t epic -p 1 \
-  --description="<goal and scope>" \
-  --json
-```
-
-Capture the returned epic ID.
-
-For each task within the epic, populate the four built-in fields:
-
-- **`--description`**: Mechanics — files to modify, implementation steps, test requirements. Extract from plan.MD and PRD.md.
-- **`--design`**: Relevant context from PRD.md. Architecture decisions affecting this task.
-- **`--acceptance`**: Verifiable outcomes (tests pass, feature works as specified, commit with task ID).
-- **`--notes`**: Source references, e.g., "Migrated from plan.MD section 'What Remains'".
-
-```
-bd create "<Task Title>" -t task -p 1 \
-  --parent <epic-id> \
-  --description="<full implementation detail>" \
-  --design="<context from PRD.md>" \
-  --acceptance="<verifiable criteria>" \
-  --notes="Migrated from plan.MD" \
-  --json
-```
-
-For long descriptions with special characters, write to a temp file first and use `--description="$(cat /tmp/desc.md)"`.
-
-Add dependencies:
-
-```
-bd dep add <dependent-task-id> <dependency-task-id>
-```
-
-## Step 7: Rewrite plan.MD
-
-Remove the "What Remains" section entirely. plan.MD now has three sections only:
-
-- **Overall Plan** — Reference active epic(s) by ID. High-level roadmap across epics.
-- **Current Status** — Keep the most recent session entries (max 3).
-- **Known Issues / Blockers** — Keep unresolved items that aren't suitable as beads tasks (decisions needed, manual testing, etc.).
-
-Add a note near the top:
-
-```
-**Task tracking:** This project uses beads. Run `bd ready` for next tasks. Active epic: <epic-id>.
-```
-
-## Step 8: Update CLAUDE.md
-
-Add a short section:
+Add beads task tracking reference:
 
 ```
 ## Task tracking
 
-This project uses beads for task management.
-- Next ready task: `bd ready --json`
-- Show task details: `bd show <task-id> --json`
-- Claim a task: `bd update <task-id> --claim --json`
-- Close a task: `bd close <task-id> --reason="..." --json`
-- Sync to git: `bd sync` (run at session end)
-- Commit with task ID: `git commit -m "<message> (<task-id>)"` — enables orphan detection via `bd doctor`
-
-Workflow skills: /start-session, /end-session, /plan-to-epic, /epic-executor
+This project uses beads. Run `bd ready` for next tasks.
+Skills: /start-session, /end-session, /plan-to-epic, /epic-executor, /adr, /migrate
 ```
 
-If CLAUDE.md already has a "standing instructions" section, add: "Always include task ID in parens in commit messages."
+CLAUDE.md must NOT contain progress tracking, session history, or implementation specs.
 
-## Step 9: Generate ADRs for existing decisions
+---
 
-Scan CLAUDE.md, PRD.md, and plan.MD for past architectural decisions that meet the ADR criteria (choice between viable options, affects future code structure, non-trivial to reverse, "why" not obvious from code).
+## Step 4: Build PRD.md (if missing or needs pruning)
+
+If PRD.md exists, read it. Prune completed specs — detailed schemas, API contracts, layout definitions for features that are fully built become dead weight. Replace with one-line pointers to the relevant source files. Keep high-level feature descriptions, acceptance criteria, and product vision even for completed features.
+
+**Context budget guideline:** PRD.md should be under 500 lines. If significantly over, prune aggressively.
+
+If PRD.md doesn't exist, construct it from README, existing docs, and user description. Include:
+- Product vision and goals
+- Features that exist today (high-level)
+- Features planned but not built (with more detail)
+- Acceptance criteria where known
+- Design principles
+
+PRD.md must NOT contain build progress, session history, or project rules.
+
+---
+
+## Step 5: Build plan.MD (if missing)
+
+If plan.MD exists and already has the correct structure (Overall Plan, Current Status, Known Issues), leave it alone unless it contains a "What Remains" section — that moves to beads.
+
+If plan.MD doesn't exist, or has stale structure (e.g., contains handoff notes, kickoff prompts, or a "What Remains" task list), construct it:
+
+**Overall Plan** — High-level phase or milestone roadmap. Extract from existing docs. Reference active epic by ID once beads is set up (Step 7). Include design doc path convention: `docs/plans/YYYY-MM-DD-<topic>-design.md`.
+
+**Current Status** — One entry dated today: "Migrated to three-file plus beads workflow. Project state at migration: [brief summary of what's built vs what's planned]."
+
+**Known Issues / Blockers** — Anything the user mentioned that's unresolved and doesn't fit as a beads task.
+
+plan.MD must NOT contain a "What Remains" task list — that's beads.
+
+---
+
+## Step 6: Create docs/adr/ and generate initial ADRs
 
 Create `docs/adr/` if it doesn't exist.
 
-Propose a batch of ADR titles — show the list and let the user approve/reject/modify. Then invoke `/adr` for each approved one.
+Scan CLAUDE.md, PRD.md, existing docs, and any ARCHITECTURE.md or DESIGN.md type files for past architectural decisions that meet ADR criteria:
 
-Common places to find existing decisions:
+- A choice between multiple viable options where alternatives were actually considered
+- Affects how future code will be structured
+- Non-trivial to reverse
+- The "why" wouldn't be obvious from reading the code alone
 
-- PRD.md "design principles" or "tech stack" sections (why this stack over alternatives).
-- CLAUDE.md "key technical decisions" sections.
-- plan.MD session entries that mention choosing between options.
-- Any existing ARCHITECTURE.md, DESIGN.md, or BROWSER_RESEARCH.md type docs.
+Propose a batch of ADR titles — show the list, let the user approve/reject/modify. Then invoke `/adr` for each approved one.
 
-If no ADR-worthy decisions are found, skip this step.
+Common sources for Enzo-style projects: tech stack choices, data model decisions, authentication approach, third-party service choices, deprecated features.
 
-## Step 10: Update PRD.md if needed
+If no ADR-worthy decisions are found, create the `docs/adr/` directory and note it's empty.
 
-PRD.md usually doesn't need changes — it remains the product spec. But if PRD.md has any "next steps", "TODO", or implementation roadmap sections, remove them (that's beads now).
+---
 
-## Step 11: Offer to install git hooks
+## Step 7: Create docs/plans/
+
+Create `docs/plans/` if it doesn't exist. No content needed yet — design docs are created by `/plan-to-epic` when features are planned.
+
+---
+
+## Step 8: Initialize beads
+
+If `.beads/` doesn't exist:
+
+```bash
+bd init --quiet
+```
+
+Install Claude Code hooks:
+
+```bash
+bd setup claude
+bd setup claude --check
+```
+
+This installs:
+- `SessionStart` → `bd prime` (injects task context at session start)
+- `PreCompact` → `bd sync` (saves beads state before context compaction)
 
 Ask the user:
+> Install beads git hooks for automatic sync? (pre-commit, post-merge)
 
+If yes: `bd hooks install`
+
+---
+
+## Step 9: Propose initial epic structure
+
+Based on plan.MD's Overall Plan and any "What Remains" content found during migration, propose beads epics for unbuilt work:
+
+- One epic per phase or major feature area
+- Tasks within each epic with inferred dependencies
+- Only for work that is genuinely unbuilt
+
+Show the proposed structure and wait for approval before creating anything in beads. If the user has nothing planned yet or the project is fully caught up, skip this step — they can use `/plan-to-epic` when ready.
+
+For each approved epic and task:
+
+```bash
+bd create "<Epic Title>" -t epic -p 1 --description="<scope and goal>" --json
+bd create "<Task Title>" -t task -p 1 \
+  --parent <epic-id> \
+  --description="<implementation detail>" \
+  --design="<context from PRD.md>" \
+  --acceptance="<verifiable criteria>" \
+  --notes="Migrated from plan.MD" \
+  --json
+bd dep add <dependent> <dependency>
 ```
-Install beads git hooks for automatic sync with git operations?
-This installs pre-commit (syncs beads data) and post-merge (pulls remote beads changes).
-```
 
-If yes:
+---
 
-```
-bd hooks install
-```
+## Step 10: Handle stale or redundant docs
 
-Some users prefer manual control. Default to asking.
+For each existing doc that's now redundant (handoff.md, prompt.txt, kickoff-prompt.md, etc.):
+- Ask the user before deleting — some may have historical value
+- If the user agrees it's stale: delete it
 
-## Step 12: Commit and push
+For docs that don't fit the three-file system but are still useful (ARCHITECTURE.md, BROWSER_RESEARCH.md, runbooks):
+- Suggest moving to `docs/` so they don't clutter the repo root
+- Don't auto-move — ask first
 
-```
-git add .beads/ .claude/ docs/adr/ CLAUDE.md PRD.md plan.MD
-git commit -m "chore: migrate to beads-based task tracking"
+Add `scratch.md` to `.gitignore` if not already there.
+
+---
+
+## Step 11: Commit and push
+
+```bash
+git add .beads/ .claude/ docs/ CLAUDE.md PRD.md plan.MD .gitignore
+git commit -m "chore: migrate to planning docs + ADR + beads workflow"
 git push
 bd sync
 ```
 
-## Step 13: Summary
+---
 
-Print for the user:
+## Step 12: Summary
 
-- Epics created (count and IDs).
-- Tasks created (count per epic).
-- ADRs created (count and titles).
-- plan.MD changes (what was removed).
-- CLAUDE.md changes (what was added).
-- Hooks installed: SessionStart, PreCompact (and pre-commit/post-merge if user chose to install).
+Print:
+
+- What was created vs what already existed (per file/directory)
+- ADRs created (count and titles)
+- Epics and tasks created (count)
+- Stale files deleted or moved
+- Any `TODO:` markers left in new docs that need user input
 - Next steps:
-  - `/start-session` to begin a session with beads (the SessionStart hook will auto-inject beads context).
-  - `/epic-executor <epic-id>` to autonomously execute the active epic if tasks are well-specified.
+  - `/start-session` to begin working
+  - `/plan-to-epic` when ready to plan the next feature
+  - `/epic-executor <epic-id>` to autonomously execute an existing epic
+
+---
 
 ## Key principles
 
-- **Ask before creating.** This migration is a significant change. Confirm epic and task structure before running bd commands.
-- **Preserve source context in task `--notes`.** Tasks should trace back to the docs they came from.
-- **Don't delete session history.** Recent plan.MD session entries stay (up to the 3-entry limit).
+- **Detect before building.** Read what exists before constructing anything. Never overwrite existing docs without confirming with the user.
+- **Ask early, ask often.** This migration makes consequential decisions about project structure. Get input rather than guessing.
+- **Verbal beats code-reading.** Always prefer asking the user to describe something over reading code to infer it.
+- **Better sparse than wrong.** Use `TODO:` markers rather than hallucinating project details.
+- **Don't delete without asking.** Existing docs may have meaning even if they're redundant.
 - **Single commit at the end.** The migration lands as one logical change.
-- **Run `bd sync` after the git push.** This ensures the beads database is also pushed.
