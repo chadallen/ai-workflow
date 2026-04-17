@@ -1,4 +1,4 @@
-# AI Coding Workflow: Three Files + ADR + Beads
+# AI Coding Workflow: Planning Docs + ADR + Beads
 
 Agents have two problems: they forget everything between sessions, and they need supervision on long features. This workflow handles both. Three markdown files plus a task tracker hold the state. Any agent can pick up cold. Well-specified work hands off to an autonomous executor with built-in review.
 
@@ -31,11 +31,120 @@ Two modes run in parallel: conversational for tasks that need real-time judgment
 | `/adr` | Creates an Architecture Decision Record. Usually invoked by other skills, not directly. |
 | `/migrate` | One-time setup for any project. Constructs docs if needed, skips what already exists. |
 
-## Setup
+## Getting Started
 
-1. Install [beads](https://github.com/steveyegge/beads).
-2. Drop the seven skill folders into `~/.claude/skills/` (personal) or `.claude/skills/` (per-project). Place `code-reviewer.md` in `~/.claude/agents/`.
-3. Run `/migrate` in your project. Handles init, hooks, doc creation or reading, initial ADRs, and task import. Detects what already exists and skips what doesn't need to be built.
+### 1. Install the tools
+
+Install [beads](https://github.com/steveyegge/beads) — a Go binary, installs in seconds:
+
+```bash
+brew install beads   # macOS
+# or see beads docs for other platforms
+```
+
+You'll also need [Claude Code](https://claude.ai/code) with a Pro or Max subscription.
+
+### 2. Install the skills
+
+Clone or download this repo. Copy the skill folders to your Claude skills directory:
+
+```bash
+# Personal (available across all projects)
+cp -r skills/start-session skills/end-session skills/plan-to-epic \
+      skills/epic-executor skills/adr skills/migrate \
+      ~/.claude/skills/
+
+# Code reviewer subagent
+cp agents/code-reviewer.md ~/.claude/agents/
+```
+
+Or per-project:
+
+```bash
+cp -r skills/* .claude/skills/
+cp agents/code-reviewer.md .claude/agents/
+```
+
+### 3. Set up your project
+
+In Claude Code, run:
+
+```
+/migrate
+```
+
+
+That's it. The skill detects what's already in your project, builds what's missing, initializes beads, installs hooks, and imports any existing tasks. For projects with sparse docs it'll ask you a few questions first to avoid reading unnecessary code.
+
+---
+
+## How to Use
+
+### Starting a session
+
+At the beginning of every coding session:
+
+```
+/start-session
+```
+
+The agent reads your docs and beads state, surfaces the next ready task, flags any unrecorded architectural decisions from last session, and proposes a plan. You approve or adjust, then work begins.
+
+### Ending a session
+
+At the end of every session:
+
+```
+/end-session
+```
+
+Closes completed beads tasks, checks for ADR-worthy decisions made during the session, updates CLAUDE.md/PRD.md/plan.MD, commits and pushes everything. The session isn't done until `git push` and `bd sync` both succeed.
+
+### Planning a new feature (autonomous mode)
+
+When you have a feature to build:
+
+```
+/plan-to-epic
+```
+
+Brainstorm with the agent in chat first. When the design is clear, this skill writes a design doc to `docs/plans/`, shows you the proposed task list with dependencies, and waits for your approval. Once you confirm, it creates the beads epic with per-task context already extracted from the design. Then:
+
+```
+/epic-executor <epic-id>
+```
+
+The agent implements each task with a fresh subagent, runs a comprehensive code review after each one (tests, linting, security, performance, simplification), fixes issues, closes the task, and moves to the next. You can walk away. Resume any time with `continue epic <epic-id>`.
+
+### Working task by task (conversational mode)
+
+For UI work, learning-heavy tasks, or anything needing real-time feedback, skip the executor and work one task at a time:
+
+```
+/start-session        # see what's next
+# work the task
+/end-session          # close it out
+```
+
+### Recording an architectural decision
+
+The agent handles this automatically at session end, but you can trigger it directly:
+
+```
+/adr
+```
+
+The agent proposes a title and one-line summary, waits for your confirm, then writes the ADR to `docs/adr/`. It won't write one without asking first.
+
+### Checking what's next
+
+Without starting a full session:
+
+```bash
+bd ready              # next unblocked tasks
+bd list --status open # all open tasks
+bd stats              # project overview
+```
 
 ---
 
