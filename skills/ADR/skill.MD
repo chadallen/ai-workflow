@@ -1,6 +1,7 @@
 ---
 name: adr
-description: Create and manage Architecture Decision Records. This skill is invoked by other skills (end-session, start-session, migrations) when they detect architectural decisions, but can also be invoked directly with /adr. Use when the user says "record this decision", "write an ADR", "document this architecture choice", or types /adr.
+description: Creates and manages Architecture Decision Records in docs/adr/. Invoked automatically by end-session, start-session, and migration skills when architectural decisions are detected. Can also be invoked directly with /adr.
+allowed-tools: Bash, Read, Write
 ---
 
 # ADR — Architecture Decision Records

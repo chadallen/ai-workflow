@@ -1,5 +1,5 @@
 ---
-name: migrate-to-beads
+name: migrate
 description: Convert a project using the three-file documentation system (CLAUDE.md, PRD.md, plan.MD) to use beads for task tracking. One-time migration. Use when the user says "migrate to beads", "set up beads on this project", "convert this to beads workflow", or types /migrate-to-beads.
 ---
 
