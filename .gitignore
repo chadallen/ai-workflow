@@ -20,6 +20,10 @@
 !skills/start-session/
 !skills/start-session/**
 
+# Linting (whitelist)
+!linting/
+!linting/**
+
 # Agents (whitelist)
 !agents/
 !agents/code-reviewer.MD

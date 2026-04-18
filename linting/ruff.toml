@@ -1,0 +1,32 @@
+# Global Ruff config for Claude code reviewer.
+# Used when a project has no local ruff.toml or pyproject.toml [tool.ruff].
+#
+# Rules philosophy:
+# - Errors: things that are almost always bugs (unused imports, undefined names)
+# - Warnings: not applicable in Ruff (all selected rules are enforced equally)
+# - Disabled: style preferences and project-specific choices
+#
+# Ruff replaces flake8, pylint, isort, and pyupgrade in one tool.
+
+line-length = 100
+
+[lint]
+select = [
+  "E",      # pycodestyle errors
+  "W",      # pycodestyle warnings
+  "F",      # pyflakes (unused imports, undefined names, etc.)
+  "I",      # isort (import ordering)
+  "B",      # flake8-bugbear (likely bugs and design issues)
+  "UP",     # pyupgrade (modernize Python syntax)
+  "C4",     # flake8-comprehensions (unnecessary list/dict/set calls)
+  "SIM",    # flake8-simplify (simplifiable code patterns)
+]
+
+ignore = [
+  "E501",   # line too long — handled by line-length above
+  "B008",   # do not perform function calls in default arguments (common in FastAPI)
+  "SIM108", # ternary operator — sometimes less readable than if/else
+]
+
+[lint.isort]
+known-first-party = []  # add project package names here if needed
