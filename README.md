@@ -1,24 +1,24 @@
 # AI Coding Workflow: Planning Docs + ADR + Beads
 
-Agents have (at least!) two problems: they forget everything between sessions, and they need supervision on long features. This workflow handles both. Three markdown files plus a task tracker hold the state. Any agent can pick up cold. Well-specified work hands off to an autonomous executor with built-in review.
+let's create the world of autonomous vibe coding agents we deserve. and/or melt the polar ice caps with the heat of a thousand data centers. but fist these little dudes need us to fix their amnesia and ADHD problems. 
 
-Two modes run in parallel: conversational for tasks that need real-time judgment, autonomous for everything else.
+amnesia: agents need us to write down what we want and they need skills to turn this into a plan with bite-sized chunks of work. 
+
+ADHD: agents need a task list and a clear set of instructions on how to work through it so they don't get sidetracked by random ideas they have. focus, agents, focus!
 
 ## The Pieces
 
-**CLAUDE.md** — Project rules, stack, conventions. Changes rarely.
+**CLAUDE.md** — put the usual stuff here. don't change it frequentky. maybe just let the agents worry about it. 
 
-**PRD.md** — Product requirements. Aggressively pruned: when a feature is built and tested, its detailed spec gets replaced with a one-line pointer to the code.
+**PRD.md** — product managers take a moment to silently reflect on this: agents are the only developers who have ever read your PRD front to back. even they will grow weary, so when something in this doc becomes working software the agents will replace your prose with a code pointer. 
 
-**plan.MD** — Session state. Three sections: Overall Plan (which epic is active), Current Status (last 3 sessions), Known Issues. No "what remains" list — that's beads now.
+**plan.MD** — agents love making plans more than following them. this doc provides the big picture approach for building your thing. it gets updated every session. the detailed session-level plans are in beads (below).
 
-**`docs/adr/`** — Architecture Decision Records. One file per decision. Captures what was chosen, what alternatives were considered, and why. The agent creates these automatically when it detects ADR-worthy decisions during a session — no manual bookkeeping.
+**`docs/adr/`** — Architecture Decision Records. "don't forget why we decided to use Python instead of PHP." these are short but curtail the idle speculation of idle agents about what might have been. 
 
-**`docs/plans/`** — Feature design docs, one per epic. Written by `/plan-to-epic` before tasks are created and reviewed before execution starts. The full design lives in the file and in the epic's beads record. Each task gets only the relevant architectural slice extracted into its `design` field — subagents never read the design doc directly.
+**`docs/plans/`** — design docs, one per epic.  helps keep context windows under control: each beads  task gets only the relevant details dumped to its `design` field — subagents never read the design doc directly.
 
-**[Beads](https://github.com/steveyegge/beads)** — Git-backed task tracker built for AI agents. Tasks have `description`, `design`, `acceptance`, and `notes` fields. Epics group tasks. Dependencies are tracked, so `bd ready` returns only what's actually unblocked.
-
-`bd setup claude` installs hooks that auto-inject task state at session start. Commits include the task ID (`git commit -m "Add login (bd-42)"`) so `bd doctor` can flag work that got committed but never closed.
+**[Beads](https://github.com/steveyegge/beads)** — task tracker for AI agents built by Yegge in a fugue state. epics group tasks. dependencies are tracked.
 
 ## The Skills
 
@@ -42,11 +42,11 @@ brew install beads   # macOS
 # or see beads docs for other platforms
 ```
 
-You'll also need [Claude Code](https://claude.ai/code) with a Pro or Max subscription.
+you also need [Claude Code](https://claude.ai/code) with a Pro or Max subscription. are you even alive otherwise?
 
 ### 2. Install the skills
 
-Clone or download this repo. Copy the skill folders to your Claude skills directory:
+clone or download this repo. copy the skill folders to your Claude skills directory:
 
 ```bash
 # Personal (available across all projects)
