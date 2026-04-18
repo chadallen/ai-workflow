@@ -46,18 +46,21 @@ Write a scratch file at `.beads/proposal.md` (create `.beads/` if it doesn't exi
 ### 1. [Task title]
 
 **Description:** [What needs to be done. Files to modify. Implementation approach if non-obvious.]
+**Design:** [Architectural context the implementer needs — patterns to follow, constraints, relevant data models. Omit if the description covers it.]
 **Acceptance:** [Verifiable outcome — tests pass, feature works as X]
 **Depends on:** [None | task numbers]
 
 ### 2. [Task title]
 
 **Description:** ...
+**Design:** ...
 **Acceptance:** ...
 **Depends on:** 1
 
 ### 3. [Task title]
 
 **Description:** ...
+**Design:** ...
 **Acceptance:** ...
 **Depends on:** 1, 2
 ```
@@ -96,6 +99,7 @@ Capture the epic ID.
 bd create "<Task Title>" -t task -p 1 \
   --parent <epic-id>  \
   --description="<task description>" \
+  --design="<design field from proposal, if present>" \
   --acceptance="<acceptance criteria>" \
   --json
 ```

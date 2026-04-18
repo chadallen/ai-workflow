@@ -105,7 +105,7 @@ Instructions for the subagent:
 
 ### 3.4 Code review
 
-Dispatch the `code-reviewer` subagent (defined in `.claude/agents/code-reviewer.md`). Pass:
+Dispatch the `code-reviewer` subagent (defined in `.claude/agents/code-reviewer.MD`). Pass:
 
 - The task description and acceptance criteria.
 - The diff: `git diff <base-sha>..HEAD`

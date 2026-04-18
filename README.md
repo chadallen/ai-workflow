@@ -32,7 +32,7 @@ this repo is the fix. a handful of markdown files, a task tracker, and some skil
 | `/create-beads` | turns a conversation into tasks. writes a proposal for you to review, creates on approval. |
 | `/build-beads` | autonomously builds tasks with code review after each one. you can walk away. |
 | `/adr` | creates an Architecture Decision Record. usually invoked by other skills, not directly. |
-| `/migrate` | one-time setup for existing projects. cleans up docs, inits beads, imports tasks. |
+| `/migrate-project` | one-time setup for existing projects. cleans up docs, inits beads, imports tasks. |
 
 ## First Time Setup (if you're new to this)
 
@@ -76,7 +76,7 @@ Linux: see [beads installation](https://github.com/steveyegge/beads) for your di
 mkdir -p ~/.claude/skills ~/.claude/agents
 
 cp -r path/to/this-repo/skills/* ~/.claude/skills/
-cp path/to/this-repo/agents/code-reviewer.md ~/.claude/agents/
+cp path/to/this-repo/agents/code-reviewer.MD ~/.claude/agents/
 ```
 
 ### 3a. linters (install when you need them)
@@ -103,7 +103,7 @@ the skill reads your PRD, asks a few quick questions about your stack, creates C
 
 ## Getting Started
 
-already set up? existing project? run `/migrate` instead of `/init-project`. it detects what exists, cleans up what needs cleaning, and adds what's missing.
+already set up? existing project? run `/migrate-project` instead of `/init-project`. it detects what exists, cleans up what needs cleaning, and adds what's missing.
 
 ---
 
@@ -133,7 +133,7 @@ brainstorm with the agent in chat first. when the shape of the work is clear:
 /create-beads
 ```
 
-agent writes a proposal to `.beads/proposal.md` — tasks with descriptions, acceptance criteria, and dependencies. edit the file directly. reorder, rescope, delete what you don't want. reply when ready and it creates the beads.
+agent writes a proposal to `.beads/proposal.md` — tasks with descriptions, design context, acceptance criteria, and dependencies. edit the file directly. reorder, rescope, delete what you don't want. reply when ready and it creates the beads.
 
 ### building tasks autonomously
 

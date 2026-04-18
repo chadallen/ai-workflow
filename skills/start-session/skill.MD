@@ -27,7 +27,7 @@ CLAUDE.md is already auto-loaded. Read:
 - **plan.MD** — Session history and active epic. Read in full.
 - **PRD.md** — Product requirements. Read in full.
 
-If plan.MD doesn't exist, stop. This project hasn't been set up for this workflow yet — suggest running `/migrate`.
+If plan.MD doesn't exist, stop. This project hasn't been set up for this workflow yet — suggest running `/init-project` (new project) or `/migrate-project` (existing project).
 
 ## Step 3: Scan for missing ADRs
 

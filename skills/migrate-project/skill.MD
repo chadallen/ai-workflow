@@ -1,5 +1,5 @@
 ---
-name: migrate
+name: migrate-project
 description: Sets up the three-file plus beads workflow on any project. Detects what already exists and skips it — works on greenfield projects, partially set up projects, and projects with existing docs. One-time setup per project.
 disable-model-invocation: true
 allowed-tools: Bash, Read, Write
@@ -75,7 +75,7 @@ Add beads task tracking reference:
 ## Task tracking
 
 This project uses beads. Run `bd ready` for next tasks.
-Skills: /start-session, /end-session, /plan-to-epic, /epic-executor, /adr, /migrate
+Skills: /start-session, /end-session, /create-beads, /build-beads, /adr
 ```
 
 CLAUDE.md must NOT contain progress tracking, session history, or implementation specs.
@@ -136,7 +136,7 @@ If no ADR-worthy decisions are found, create the `docs/adr/` directory and note 
 
 ## Step 7: Create docs/plans/
 
-Create `docs/plans/` if it doesn't exist. No content needed yet — design docs are created by `/plan-to-epic` when features are planned.
+Create `docs/plans/` if it doesn't exist. No content needed yet — design docs are created by `/create-beads` when features are planned.
 
 ---
 
@@ -178,7 +178,7 @@ Based on plan.MD's Overall Plan and any "What Remains" content found during migr
 - Tasks within each epic with inferred dependencies
 - Only for work that is genuinely unbuilt
 
-Show the proposed structure and wait for approval before creating anything in beads. If the user has nothing planned yet or the project is fully caught up, skip this step — they can use `/plan-to-epic` when ready.
+Show the proposed structure and wait for approval before creating anything in beads. If the user has nothing planned yet or the project is fully caught up, skip this step — they can use `/create-beads` when ready.
 
 For each approved epic and task:
 
@@ -232,8 +232,8 @@ Print:
 - Any `TODO:` markers left in new docs that need user input
 - Next steps:
   - `/start-session` to begin working
-  - `/plan-to-epic` when ready to plan the next feature
-  - `/epic-executor <epic-id>` to autonomously execute an existing epic
+  - `/create-beads` when ready to plan the next feature
+  - `/build-beads <epic-id>` to autonomously execute an existing epic
 
 ---
 
