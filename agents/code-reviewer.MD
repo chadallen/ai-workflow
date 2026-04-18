@@ -35,26 +35,22 @@ Return: APPROVED or NEEDS_CHANGES with specific file:line references for any gap
 
 ### Agent 2: Test Runner
 ```
-Run relevant tests for the changed files.
+Check CLAUDE.md for the test command. Look for test scripts in package.json, Makefile, or pytest/cargo equivalents.
 
-Report:
-- Which tests were run
-- Pass/fail status
-- Any failures with details
+If tests exist: run them for the changed files and report which tests ran, pass/fail status, and any failures with details.
 
-If no test command is obvious, check package.json scripts, Makefile, or CLAUDE.md for the correct command.
+If no test suite is found: explicitly report "No test suite found — this check could not be performed." Do NOT silently skip or imply tests passed.
 ```
 
 ### Agent 3: Linter & Static Analysis
 ```
-Run linters for the changed files. Check CLAUDE.md for the project's lint command.
+Check CLAUDE.md for the lint command. Look for ESLint, Biome, Ruff, Clippy, or similar in package.json devDependencies or config files (.eslintrc*, biome.json, etc.).
 
-Also run getDiagnostics on changed files for type errors and unresolved references.
+If a linter is configured: run it on the changed files and report tool used, warnings/errors, and whether they are auto-fixable.
 
-Report:
-- Tool(s) used
-- Warnings or errors found
-- Auto-fixable vs manual fixes needed
+If no linter is found: explicitly report "No linter configured — this check could not be performed." Do NOT silently skip or imply the code is lint-clean.
+
+Always run the type checker if one exists (e.g. tsc --noEmit, pyright, cargo check). Report results separately from linting.
 ```
 
 ### Agent 4: Security Reviewer
@@ -153,6 +149,7 @@ Collect all agent results and produce a prioritized summary:
 1. **Categorize** — separate issues (must fix) from suggestions (nice to have)
 2. **Rank by severity** — Critical > High > Medium > Low across all agents
 3. **Collapse clean results** — agents with no findings get one-line summary
+4. **Never collapse skipped checks** — if a check could not run (no test suite, no linter), list it explicitly under "Not Checked" — do not include it in "All Clear"
 
 ### Output Format
 
@@ -171,6 +168,10 @@ Collect all agent results and produce a prioritized summary:
 
 ### All Clear
 Tests (N passed), Linter (clean), [other clean agents...]
+
+### Not Checked
+- Tests: no test suite found
+- Linter: no linter configured
 
 ### Verdict: [APPROVED | NEEDS_CHANGES]
 One sentence on what to do next.

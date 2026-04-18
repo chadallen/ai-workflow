@@ -148,6 +148,8 @@ If `.beads/` doesn't exist:
 bd init --quiet
 ```
 
+Note: `bd init` automatically creates its own git commit (`bd init: initialize beads issue tracking`). This is expected — the migration will land as two commits rather than one.
+
 Install Claude Code hooks:
 
 ```bash
@@ -158,6 +160,8 @@ bd setup claude --check
 This installs:
 - `SessionStart` → `bd prime` (injects task context at session start)
 - `PreCompact` → `bd sync` (saves beads state before context compaction)
+
+**Verify the PreCompact hook explicitly** — `bd setup claude` sometimes leaves a pre-existing `PreCompact` hook unchanged. Check `.claude/settings.json` and confirm `PreCompact` runs `bd sync`, not `bd prime`. Fix manually if wrong.
 
 Ask the user:
 > Install beads git hooks for automatic sync? (pre-commit, post-merge)
@@ -212,7 +216,7 @@ Add `scratch.md` to `.gitignore` if not already there.
 git add .beads/ .claude/ docs/ CLAUDE.md PRD.md plan.MD .gitignore
 git commit -m "chore: migrate to planning docs + ADR + beads workflow"
 git push
-bd sync
+bd dolt push
 ```
 
 ---
@@ -240,4 +244,4 @@ Print:
 - **Verbal beats code-reading.** Always prefer asking the user to describe something over reading code to infer it.
 - **Better sparse than wrong.** Use `TODO:` markers rather than hallucinating project details.
 - **Don't delete without asking.** Existing docs may have meaning even if they're redundant.
-- **Single commit at the end.** The migration lands as one logical change.
+- **Two commits is normal.** `bd init` auto-commits its own initialization. The migration lands as two commits: the `bd init` commit and the main migration commit. This is expected.

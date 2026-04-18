@@ -5,7 +5,7 @@ description: End-of-session cleanup including beads issue management, documentat
 
 # End Session
 
-Run this procedure exactly. Do NOT write any project code during this procedure. The session is NOT done until the final `git push` and `bd sync` succeed.
+Run this procedure exactly. Do NOT write any project code during this procedure. The session is NOT done until the final `git push` and `bd dolt push` succeed.
 
 ## Step 1: Close completed beads issues
 
@@ -23,7 +23,11 @@ Never leave a task `in_progress` just because the session ended without deciding
 
 ## Step 2: Check for orphans
 
-Run `bd doctor` to detect orphaned issues — work committed but not closed. For any found:
+Run `bd doctor` to detect orphaned issues — work committed but not closed.
+
+Note: `bd doctor` is not supported in embedded mode (the default). If it prints "not yet supported in embedded mode", skip this step — no action needed.
+
+For any orphans found:
 
 - If actually done, close it.
 - If work is incomplete, file a follow-up task with `bd create`.
@@ -100,7 +104,7 @@ Commit: `docs: end-of-session update — <brief summary>`. Include any task IDs 
 1. `git pull --rebase` — pull any remote changes first.
 2. `git push` — push everything.
 3. `git status` — must show "up to date with origin/<branch>".
-4. `bd sync` — sync beads data to git (Dolt commit + push).
+4. `bd dolt push` — sync beads data to remote. (`bd sync` does not exist — use `bd dolt push`.)
 5. If any step fails, resolve the issue and retry. Do not give up.
 
 Do NOT end the session with unpushed work. Do NOT tell the user "ready to push when you are." Push it yourself.
