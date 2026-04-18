@@ -44,11 +44,19 @@ If no test suite is found: explicitly report "No test suite found — this check
 
 ### Agent 3: Linter & Static Analysis
 ```
-Check CLAUDE.md for the lint command. Look for ESLint, Biome, Ruff, Clippy, or similar in package.json devDependencies or config files (.eslintrc*, biome.json, etc.).
+Check CLAUDE.md for the lint command. Look for ESLint, Biome, Ruff, Clippy, or similar in package.json devDependencies or config files (.eslintrc*, eslint.config.*, biome.json, etc.).
 
-If a linter is configured: run it on the changed files and report tool used, warnings/errors, and whether they are auto-fixable.
+If a project-level linter is configured: run it on the changed files and report tool used, warnings/errors, and whether they are auto-fixable.
 
-If no linter is found: explicitly report "No linter configured — this check could not be performed." Do NOT silently skip or imply the code is lint-clean.
+If no project-level linter is found: fall back to the global ESLint config:
+```bash
+~/.claude/linting/node_modules/.bin/eslint \
+  --config ~/.claude/linting/eslint.config.js \
+  <changed files>
+```
+Report results. Note in the output that the global fallback config was used (not a project-specific config).
+
+If the global fallback also fails (e.g. non-JS/TS project): explicitly report "No linter available for this file type — this check could not be performed."
 
 Always run the type checker if one exists (e.g. tsc --noEmit, pyright, cargo check). Report results separately from linting.
 ```
