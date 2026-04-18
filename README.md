@@ -1,6 +1,6 @@
 # AI Coding Workflow: Planning Docs + ADR + Beads
 
-Agents have two problems: they forget everything between sessions, and they need supervision on long features. This workflow handles both. Three markdown files plus a task tracker hold the state. Any agent can pick up cold. Well-specified work hands off to an autonomous executor with built-in review.
+Agents have (at least!) two problems: they forget everything between sessions, and they need supervision on long features. This workflow handles both. Three markdown files plus a task tracker hold the state. Any agent can pick up cold. Well-specified work hands off to an autonomous executor with built-in review.
 
 Two modes run in parallel: conversational for tasks that need real-time judgment, autonomous for everything else.
 
