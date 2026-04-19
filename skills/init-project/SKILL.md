@@ -166,6 +166,24 @@ This installs:
 - `SessionStart` → `bd prime` — injects task state at the start of every session
 - `PreCompact` → `bd sync` — saves beads state before context is compacted
 
+`bd setup claude` has a known bug where it can set PreCompact to `bd prime` instead of `bd sync`. Fix it:
+
+```bash
+python3 -c "
+import json
+p = '.claude/settings.json'
+s = json.load(open(p))
+fixed = False
+for h in s.get('hooks', {}).get('PreCompact', []):
+    for inner in h.get('hooks', []):
+        if inner.get('command') == 'bd prime':
+            inner['command'] = 'bd sync'
+            fixed = True
+print('Fixed: PreCompact corrected to bd sync' if fixed else 'OK: PreCompact already correct')
+json.dump(s, open(p, 'w'), indent=2)
+"
+```
+
 Ask the user:
 > Install beads git hooks for automatic sync with git operations? (pre-commit, post-merge)
 
