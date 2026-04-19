@@ -2,9 +2,9 @@
 
 Let's create the world of autonomous vibe coding agents we deserve so that AI can provide for us while we pursue the realization of our authentic selves. It will only happen if these agents have better memories and more focused work habits.
 
-I made this for myself. Claude describes it below using many words that you can read if that's your thing. Or just try it:
+YOLO version:
 
-Clone this repo into your project folder and go:
+Clone this repo into your project folder and run:
 
 ```bash
 git clone https://github.com/chadallen/claude-workflow.git my-project
@@ -47,7 +47,7 @@ The basic workflow is `start-session` → `create-beads` → `build-beads` → `
 | `/init-project` | Brand new project. Reads your PRD, creates CLAUDE.md and plan.MD, inits beads. |
 | `/start-session` | Beginning of a session. Reads docs and beads, flags missing ADRs, proposes a plan. |
 | `/end-session` | End of a session. Closes tasks, checks for ADR-worthy decisions, updates docs, pushes everything. |
-| `/create-beads` | Turns a conversation into tasks. Writes a proposal for you to review, creates Beads on approval. |
+| `/create-beads` | Turns a conversation into tasks. Writes a proposal for you to review, creates Beads on approval. Tip: once it has the proposal open, you can just keep adding to it: "add another task to make all of the buttons blue." |
 | `/build-beads` | Autonomously builds tasks with code review after each one. You can walk away. |
 | `/adr` | Creates an Architecture Decision Record. Usually invoked by other skills, not directly. |
 | `/migrate-project` | One-time setup for existing projects. Cleans up docs, inits beads, imports tasks. |
@@ -158,7 +158,7 @@ Brainstorm with the agent in chat first. When the shape of the work is clear:
 /create-beads
 ```
 
-Agent writes a proposal to `.beads/proposal.md` — tasks with descriptions, design context, acceptance criteria, and dependencies. Edit the file directly. Reorder, rescope, delete what you don't want. Reply when ready and it creates the beads.
+Agent writes a proposal to `.beads/proposal.md` — tasks with descriptions, design context, acceptance criteria, and dependencies. Edit the file directly or tell Claude what to change. Reorder, rescope, add more tasks, delete what you don't want. Reply when ready and it creates the beads.
 
 ### Building tasks autonomously
 
