@@ -4,11 +4,11 @@ Let's create the world of autonomous vibe coding agents we deserve so that AI ca
 
 YOLO version:
 
-Clone this repo into your project folder and run:
+Clone this repo into your Claude Code project folder and run:
 
 ```bash
-git clone https://github.com/chadallen/claude-workflow.git my-project
-cd my-project && claude
+git clone https://github.com/chadallen/claude-workflow.git your-project-path
+cd your-project-path && claude
 ```
 
 The skills live in `.claude/skills/` and are picked up automatically by Claude Code. No copying required.
@@ -48,11 +48,11 @@ The basic workflow is `start-session` → `create-beads` → `build-beads` → `
 | `/start-session` | Beginning of a session. Reads docs and beads, flags missing ADRs, proposes a plan. |
 | `/end-session` | End of a session. Closes tasks, checks for ADR-worthy decisions, updates docs, pushes everything. |
 | `/create-beads` | Turns a conversation into tasks. Writes a proposal for you to review, creates Beads on approval. Tip: once it has the proposal open, you can just keep adding to it: "add another task to make all of the buttons blue." |
-| `/build-beads` | Autonomously builds tasks with code review after each one. You can walk away. |
+| `/build-beads` | Will ask you what Beads tasks to work on. Sub-agents write code and other sub-agents review. You can walk away if you the agents have full bypass permissions. |
 | `/adr` | Creates an Architecture Decision Record. Usually invoked by other skills, not directly. |
 | `/migrate-project` | One-time setup for existing projects. Cleans up docs, inits beads, imports tasks. |
 
-## First time setup (if you're new to this)
+## First time setup (if you're new to Claude code in general, in which case I have no idea why you're starting here but whatever)
 
 Advanced users skip to [Getting Started](#getting-started).
 
