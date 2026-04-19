@@ -92,7 +92,6 @@ If PRD.md doesn't exist, construct it from README, existing docs, and user descr
 - Product vision and goals
 - Features that exist today (high-level)
 - Features planned but not built (with more detail)
-- Acceptance criteria where known
 - Design principles
 
 PRD.md must NOT contain build progress, session history, or project rules.

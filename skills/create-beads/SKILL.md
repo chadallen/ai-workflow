@@ -161,6 +161,7 @@ Print:
 ## Key principles
 
 - **Conversation is the source.** The proposal is distilled from what was just discussed — don't invent tasks that weren't mentioned.
+- **Derive acceptance criteria from the PRD.** Users describe intent; agents translate it into verifiable outcomes. If acceptance criteria aren't explicit in the conversation, read the relevant PRD feature description and write criteria that a reviewer could check without asking the user. Prefer observable behavior ("tapping X shows Y") over implementation details ("function Z returns true").
 - **Edit in the file, not in chat.** Scratch markdown is faster to review and edit than asking for changes through multiple chat turns.
 - **Read the file again before creating.** The user may have edited it — don't rely on what the agent drafted.
 - **Default to smaller tasks.** If a task description feels like it covers too much, split it. Beads tasks should be 30-90 minute chunks of work.
