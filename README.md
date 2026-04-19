@@ -2,9 +2,9 @@
 
 Let's create the world of autonomous vibe coding agents we deserve so that AI can provide for us while we pursue the realization of our authentic selves. It will only happen if these agents have better memories and more focused work habits.
 
-YOLO version:
+# The short version 
 
-Clone this repo into your Claude Code project folder and run:
+What do you have to lose? Clone this repo into your Claude Code project folder and run:
 
 ```bash
 git clone https://github.com/chadallen/claude-workflow.git your-project-path
@@ -13,17 +13,10 @@ cd your-project-path && claude
 
 The skills live in `.claude/skills/` and are picked up automatically by Claude Code. No copying required.
 
-1. For a new project: add your `PRD.md` and invoke `/init-project`.
-2. For an existing project: invoke `/migrate-project`.
+1. For a new project: write your `PRD.md` and invoke `/init-project`. Use the PRD template if you want.
+2. For an existing project: invoke `/migrate-project`. Claude will write the PRD for you as long as you have some code and/or documentation in there.
 
 The basic workflow is `start-session` → `create-beads` → `build-beads` → `end-session`. Don't know what Beads are? Whatever, man.
-
-> **Want these skills available in all your projects?** Copy them to your global Claude config once:
-> ```bash
-> cp -r .claude/skills/* ~/.claude/skills/
-> cp .claude/agents/code-reviewer.MD ~/.claude/agents/
-> ```
-> After that you don't need to clone this repo into each project.
 
 # The long version 
 
@@ -51,6 +44,15 @@ The basic workflow is `start-session` → `create-beads` → `build-beads` → `
 | `/build-beads` | Will ask you what Beads tasks to work on. Sub-agents write code and other sub-agents review. You can walk away if you the agents have full bypass permissions. |
 | `/adr` | Creates an Architecture Decision Record. Usually invoked by other skills, not directly. |
 | `/migrate-project` | One-time setup for existing projects. Cleans up docs, inits beads, imports tasks. |
+
+
+> **Want these skills available in all your projects?** Copy them to your global Claude config once:
+> ```bash
+> cp -r .claude/skills/* ~/.claude/skills/
+> cp .claude/agents/code-reviewer.MD ~/.claude/agents/
+> ```
+> After that you don't need to clone this repo into each project.
+
 
 ## First time setup (if you're new to Claude code in general, in which case I have no idea why you're starting here but whatever)
 
