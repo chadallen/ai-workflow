@@ -1,18 +1,17 @@
-# AI coding workflow: Planning docs + ADR + Beads
+# A workflow for Claude coding with autonomous sub-agents
 
-Let's create the world of autonomous vibe coding agents we deserve. But first these little dudes need us to fix their amnesia and ADHD problems.
+Let's create the world of autonomous vibe coding agents we deserve so that AI can provide for us while we pursue the realization of our authentic selves. It will only happen if these agents have better memories and more focused work habits.
 
-**Amnesia:** Agents forget everything between sessions. We write things down so they don't have to start from scratch every time.
+There are a lot of words down below that you can read if that's your thing. But, like, YOLO: just take an existing Claude code project, clone this repo there and invoke the `/init-project` skill. If you want to try this on a new Claude code project, clone this repo, update PRD.MD with your dumbest ideas and invoke `/migrate-project`. From there do what the agent tells you to do. The basic workflow is `start-session` -> `create-beads` -> `build beads` -> `end-session`. You can skip `create-beads` if you already have a backlog of Beads. Don't know what Beads are? Whatever, man.
 
-**ADHD:** Agents get distracted and go off on tangents. We give them a task list and a clear process so they stay focused.
+# The long version 
 
-This repo is the fix. A handful of markdown files, a task tracker, and some skills that wire it all together.
 
 ## The pieces
 
-**CLAUDE.md** — The usual stuff. Stack, conventions, hard rules. Keep it short. Agents will help maintain it.
+**CLAUDE.md** — The usual stuff. Stack, conventions, hard rules. If you're starting a new project just let Claude write this. Actually don't ever touch this. Agents will maintain it.
 
-**PRD.md** — Product managers take a moment to silently reflect: agents are the only developers who have ever read your PRD front to back. Even they grow weary, so when something in this doc becomes working software they'll replace your prose with a code pointer.
+**PRD.md** — Product managers take a moment to silently reflect: agents are the only developers who have ever read a PRD front to back. Even they grow weary, so when something in this doc becomes working software they'll replace your garrulous prose with a code pointer.
 
 **plan.MD** — The big picture. Phases, what's active, what's next. Agents update it every session. The detailed task-level stuff lives in beads.
 

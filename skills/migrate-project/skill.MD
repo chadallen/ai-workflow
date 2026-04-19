@@ -7,7 +7,7 @@ allowed-tools: Bash, Read, Write
 
 # Migrate
 
-Sets up the complete workflow on any project: CLAUDE.md, PRD.md, plan.MD, docs/adr/, docs/plans/, beads, and Claude Code hooks. Detects what already exists and skips it. Constructs what's missing.
+Sets up the complete workflow on any project: CLAUDE.md, PRD.md, plan.MD, docs/adr/, beads, and Claude Code hooks. Detects what already exists and skips it. Constructs what's missing.
 
 Do NOT write any application code during this migration.
 
@@ -34,7 +34,6 @@ Check for each of the following and note present/missing:
 - `PRD.md` (or `PRD.MD`)
 - `plan.MD` (or `plan.md`)
 - `docs/adr/` directory
-- `docs/plans/` directory
 - `.beads/` directory
 - `.claude/` settings with beads hooks
 
@@ -104,7 +103,7 @@ If plan.MD exists and already has the correct structure (Overall Plan, Current S
 
 If plan.MD doesn't exist, or has stale structure (e.g., contains handoff notes, kickoff prompts, or a "What Remains" task list), construct it:
 
-**Overall Plan** — High-level phase or milestone roadmap. Extract from existing docs. Reference active epic by ID once beads is set up (Step 7). Include design doc path convention: `docs/plans/YYYY-MM-DD-<topic>-design.md`.
+**Overall Plan** — High-level phase or milestone roadmap. Extract from existing docs. Reference active epic by ID once beads is set up (Step 7).
 
 **Current Status** — One entry dated today: "Migrated to three-file plus beads workflow. Project state at migration: [brief summary of what's built vs what's planned]."
 
@@ -133,13 +132,7 @@ If no ADR-worthy decisions are found, create the `docs/adr/` directory and note 
 
 ---
 
-## Step 7: Create docs/plans/
-
-Create `docs/plans/` if it doesn't exist. No content needed yet — design docs are created by `/create-beads` when features are planned.
-
----
-
-## Step 8: Initialize beads
+## Step 7: Initialize beads
 
 If `.beads/` doesn't exist:
 

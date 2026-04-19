@@ -55,7 +55,6 @@ Update only if this session changed project-level rules, conventions, tooling, o
 - Progress tracking, session history, task lists → plan.MD
 - Accumulated gotchas that are task-adjacent but not universal → plan.MD Build Notes
 - Architecture decisions → `docs/adr/`
-- Feature-level design → `docs/plans/`
 - Code style rules → linter config
 
 **Before adding anything, apply the cost test:**

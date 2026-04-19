@@ -138,10 +138,10 @@ Write this to disk without needing approval — it's scaffolding, not a decision
 ## Step 6: Create docs/ structure
 
 ```bash
-mkdir -p docs/adr docs/plans
+mkdir -p docs/adr
 ```
 
-These are empty directories. `docs/adr/` will hold Architecture Decision Records as they're created. `docs/plans/` is available for design docs if needed.
+This directory will hold Architecture Decision Records as they're created.
 
 ---
 
@@ -208,7 +208,6 @@ Created:
   ✓ CLAUDE.md
   ✓ plan.MD
   ✓ docs/adr/
-  ✓ docs/plans/
   ✓ .beads/ (initialized)
   ✓ Claude Code hooks (SessionStart, PreCompact)
 
