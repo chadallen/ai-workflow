@@ -26,7 +26,17 @@ Never leave a task `in_progress` just because the session ended without deciding
 
 ## Step 2: Check for orphans
 
-Run `bd doctor` to detect orphaned issues — work committed but not closed. For any found:
+`bd doctor` only works in server mode. Skip it in embedded mode (the default):
+
+```bash
+if [ -d ".beads/embeddeddolt" ]; then
+  echo "Embedded mode — skipping bd doctor."
+else
+  bd doctor
+fi
+```
+
+For any orphans found in server mode:
 
 - If actually done, close it.
 - If work is incomplete, file a follow-up task with `bd create`.
