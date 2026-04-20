@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Runs a comprehensive code review using parallel subagents — spec compliance, tests, linting, security, code quality, test quality, performance, and simplification. Returns APPROVED or NEEDS_CHANGES with a prioritized summary. Invoked by build-beads after each task; can also be invoked directly.
+description: Runs a comprehensive code review using parallel subagents — spec compliance, tests, linting, security, code quality, test quality, performance, and simplification. Returns APPROVED or NEEDS_CHANGES with a prioritized summary. Invoked by build-tasks after each task; can also be invoked directly.
 tools: Read, Grep, Glob, Bash
 model: sonnet
 effort: high
@@ -63,7 +63,7 @@ Attempt to run a linter for the changed files. Use this detection order:
 Report one of:
 - Linter found and ran: list any warnings or errors found, note auto-fixable vs manual
 - No linter found: "No linter configured. getDiagnostics found: [results or 'no issues']."
-  Suggest: "Consider adding a linter config (ruff.toml for Python, eslint.config.js for TypeScript/JavaScript, swiftlint.yml for Swift) — configs are included in this repo."
+  Suggest: "Consider adding a linter config (ruff.toml for Python, eslint.config.js for TypeScript/JavaScript, swiftlint.yml for Swift)."
 
 Never fail the review solely because no linter is installed. Treat missing linter as a suggestion, not a blocker.
 ```
@@ -185,7 +185,6 @@ Collect all agent results and produce a prioritized summary:
 ### Setup Suggestions (optional)
 - No linter configured. Add ruff.toml (Python), eslint.config.js (TypeScript/JS),
   or swiftlint.yml (Swift) to enable automated style and error checking.
-  Configs for all three are included in this repo.
 
 ### All Clear
 Tests (N passed), Linter (clean), [other clean agents...]

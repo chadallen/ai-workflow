@@ -1,54 +1,50 @@
 # A workflow for Claude coding with autonomous sub-agents
 
-Let's create the world of autonomous vibe coding agents we deserve, so that AI can provide for our material needs while we pursue the realization of our authentic selves. It's not just going to magically happen on its own! I'm trying to do my part here. 
-
-The motivations for this workflow (which I use for my personal projects) are:
+Let's create the world of autonomous vibe coding agents we deserve, so that AI can provide for our material needs while we pursue the realization of our authentic selves. For that to happen we need to make some improvements around here:
 
 1. Agents need better memory
-2. Agents work best when they have small, well-defined tasks to complete
-3. Humans should focus on thinking about the "what" and not the "how"
+2. Agents need small, well-defined tasks to work on
+3. Humans need need to be isolated from the "how" so they focus on the "what" 
 
 # The short version 
 
-I address #1 and #2 by using a lightweight tracker to record, prioritize and manage state on tasks. I address #3 by helping the user focus on defining the product and prioritizing work.
+The gist of it is to fix #1 and #2 by using a lightweight task tracker (Beads) and to fix #3 by creating a clear delineation between "what" and "how" artifacts.
 
-What do you have to lose? Clone this repo into your Claude Code project folder:
+Enough talking! Try it or don't! Clone this repo into your Claude Code project folder:
 
 ```bash
 git clone https://github.com/chadallen/claude-workflow.git your-project-path
 ```
 
-1. For a new project: write your `PRD.md` (get Claude to help you) and invoke `/init-project`. Use the PRD template if you want.
-2. For an existing project: invoke `/migrate-project`. Claude will write the PRD for you as long as you have some code and/or documentation in your project.
+1. For a new project: write your `PRD.md` (get Claude to help you) and invoke `/init-project`. Use the `PRD.MD` template if you want.
+2. For an existing project: invoke `/migrate-project`. Claude will write the PRD for you as long as you have some code and/or documentation in your project (but you should probably at least glance at it).
 
-The basic workflow is `start-session` → `create-tasks` and/or `build-tasks` → `end-session`. Don't know what Beads are? Whatever, man.
-
-# The long version 
+The basic workflow is `start-session` → `create-tasks` and/or `build-tasks` → `end-session`. 
 
 
 ## The pieces
 
-**PRD.md** — Product managers take a moment to silently reflect: agents are the only developers who have ever read a PRD front to back. Even they grow weary, so when something in this doc becomes working software they'll replace your garrulous prose with a code pointer. This is really the only doc you need to touch in this workflow.
+**PRD.md** — Product managers take a moment to silently reflect: agents are the only developers who have ever read a PRD front to back. Even they grow weary of this toil. When something in this doc becomes working software they'll replace your garrulous prose with a code pointer. This is really the only doc you need to touch in this workflow.
 
-**CLAUDE.md** — The usual stuff. Stack, conventions, hard rules. If you're starting a new project just let Claude write this. Actually don't ever touch this. Agents will maintain it.
+**CLAUDE.md** — If you're starting a new project just let Claude write this. Actually don't ever touch this. Agents will maintain it.
 
 **plan.MD** — The big picture. Phases, what's active, what's next. Agents update it every session. The detailed task-level stuff is tracked as tasks. Don't touch this either.
 
 **`docs/adr/`** — Architecture Decision Records. Short notes on why we made the choices we did. Curtails the idle speculation of idle agents about what might have been. They will write and maintain these.
 
-**[Beads](https://github.com/steveyegge/beads)** — Task tracker for AI agents, built by Yegge in a fugue state. Tasks have description, design, acceptance criteria, and notes fields. Epics group tasks. Dependencies are tracked.
+**[Beads](https://github.com/steveyegge/beads)** — Task tracker for AI agents, built by Steve Yegge in a fugue state. Tasks have description, design, acceptance criteria and notes fields. Epics group tasks. Dependencies are tracked.
 
 ## The skills
 
 | Skill | When |
 |---|---|
 | `/init-project` | Brand new project. Reads your PRD, creates CLAUDE.md and plan.MD, inits task tracking. |
+| `/migrate-project` | One-time setup for existing projects. Cleans up docs, inits task tracking, imports tasks. |
 | `/start-session` | Beginning of a session. Reads docs and task state, flags missing ADRs, proposes a plan. |
-| `/end-session` | End of a session. Closes tasks, checks for ADR-worthy decisions, updates docs, pushes everything. |
 | `/create-tasks` | Turns a conversation into tasks. Writes a proposal for you to review, creates tasks on approval. Tip: once it has the proposal open, you can just keep adding to it: "add another task to make all of the buttons blue." After the PRD is written, this is your other main human touch point with the workflow.|
 | `/build-tasks` | Will ask you what tasks to work on. Sub-agents write code and other sub-agents review. You can walk away if you the agents have full bypass permissions. |
 | `/adr` | Creates an Architecture Decision Record. Usually invoked by other skills, not directly. |
-| `/migrate-project` | One-time setup for existing projects. Cleans up docs, inits task tracking, imports tasks. |
+| `/end-session` | End of a session. Closes tasks, checks for ADR-worthy decisions, updates docs, pushes everything. |
 
 
 > **Want these skills available in all your projects?** Copy them to your global Claude config once:
@@ -113,7 +109,7 @@ cp .claude/agents/code-reviewer.MD ~/.claude/agents/
 
 ### 3a. Linters (install when you need them)
 
-The repo includes configs for Python (Ruff), TypeScript/JavaScript (ESLint), and Swift (SwiftLint). You don't need to install them upfront — the code reviewer will tell you if one is missing when it runs.
+If your project has a linter configured (ruff.toml, eslint.config.js, swiftlint.yml), the code reviewer detects and runs it automatically. No linter is required — the reviewer will note if one is missing but won't block approval.
 
 ### 4. Start a new project
 
