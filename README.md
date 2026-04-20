@@ -8,7 +8,7 @@ Let's create the world of autonomous vibe coding agents we deserve, so that AI c
 
 # The short version 
 
-The gist of it is to fix #1 and #2 by using a lightweight task tracker (Beads) and to fix #3 by creating a clear delineation between "what" and "how" artifacts.
+We can help with #1 and #2 by using a lightweight task tracker (Beads) and make #3 better by creating a clear delineation between "what" and "how" artifacts.
 
 Enough talking! Try it or don't! Clone this repo into your Claude Code project folder:
 
@@ -17,14 +17,14 @@ git clone https://github.com/chadallen/claude-workflow.git your-project-path
 ```
 
 1. For a new project: write your `PRD.md` (get Claude to help you) and invoke `/init-project`. Use the `PRD.MD` template if you want.
-2. For an existing project: invoke `/migrate-project`. Claude will write the PRD for you as long as you have some code and/or documentation in your project (but you should probably at least glance at it).
+2. For an existing project: invoke `/migrate-project`. Claude will write the PRD for you as long as you have some code and/or documentation in your project directory (but you should probably at least glance at it).
 
 The basic workflow is `start-session` → `create-tasks` and/or `build-tasks` → `end-session`. 
 
 
 ## The pieces
 
-**PRD.md** — Product managers take a moment to silently reflect: agents are the only developers who have ever read a PRD front to back. Even they grow weary of this toil. When something in this doc becomes working software they'll replace your garrulous prose with a code pointer. This is really the only doc you need to touch in this workflow.
+**PRD.md** — Product managers, please take a moment to silently reflect: agents are the only developers who have ever read a PRD front to back. Even they grow weary of this toil. When something in this doc becomes working software they'll replace your garrulous prose with a code pointer. This is really the only doc you need to touch in this workflow.
 
 **CLAUDE.md** — If you're starting a new project just let Claude write this. Actually don't ever touch this. Agents will maintain it.
 
@@ -55,7 +55,9 @@ The basic workflow is `start-session` → `create-tasks` and/or `build-tasks` �
 > After that you don't need to clone this repo into each project.
 
 
-## First time setup (if you're new to Claude code in general, in which case I have no idea why you're starting here but whatever)
+## First time setup for newbies
+
+Follow these steps if you're new to Claude code in general, in which case I have no idea why you're starting here but whatever
 
 Advanced users skip to [Getting Started](#getting-started).
 
@@ -96,7 +98,7 @@ Linux: See [beads installation](https://github.com/steveyegge/beads) for your di
 Clone this repo into your project folder — the skills are in `.claude/skills/` and Claude Code picks them up automatically:
 
 ```bash
-git clone https://github.com/chadallen/claude-workflow.git my-project
+git clone https://github.com/chadallen/claude-workflow.git our-project-path
 cd my-project && claude
 ```
 
@@ -109,7 +111,7 @@ cp .claude/agents/code-reviewer.MD ~/.claude/agents/
 
 ### 3a. Linters (install when you need them)
 
-If your project has a linter configured (ruff.toml, eslint.config.js, swiftlint.yml), the code reviewer detects and runs it automatically. No linter is required — the reviewer will note if one is missing but won't block approval.
+The repo includes configs for Python (Ruff), TypeScript/JavaScript (ESLint), and Swift (SwiftLint). You don't need to install them upfront — the code reviewer will tell you if one is missing when it runs.
 
 ### 4. Start a new project
 
