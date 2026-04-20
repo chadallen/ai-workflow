@@ -178,6 +178,8 @@ Print:
 - Dependency summary (e.g., "task 2 depends on task 1; task 3 depends on tasks 1 and 2")
 - Next step: `/build-tasks <epic-id>` for autonomous execution, or `/start-session` to pick up the next ready task manually
 
+Do NOT offer to start building or begin implementation. Your job ends here. The user must explicitly invoke `/build-tasks` or `/start-session` themselves.
+
 ---
 
 ## Key principles
