@@ -41,7 +41,7 @@ If `bd prime` already ran via hook, you have most of this. Otherwise run:
 - `bd blocked --json` — blocked tasks
 - If plan.MD notes an active epic, run `bd list --parent <epic-id> --json` to see all tasks in the epic and their status
 
-If `.beads/` doesn't exist, stop. Suggest running `/migrate`.
+If `.beads/` doesn't exist, stop. Suggest running `/migrate-project`.
 
 ## Step 5: Present the session plan
 

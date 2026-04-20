@@ -202,4 +202,4 @@ bd stats              # project overview
 
 ---
 
-Beads workflow inspired by [Jarred Kenny's beads workflow](https://jx0.ca/solving-agent-context-loss/).
+Beads workflow inspired by [Jarred Kenny](https://jx0.ca/solving-agent-context-loss/).

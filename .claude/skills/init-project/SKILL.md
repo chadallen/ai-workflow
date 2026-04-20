@@ -163,23 +163,21 @@ bd setup claude --check
 ```
 
 This installs:
-- `SessionStart` → `bd prime` — injects task state at the start of every session
-- `PreCompact` → `bd prime` — saves task state before context is compacted
+- `SessionStart` → `bd prime --stealth` — injects task state without git instructions (our skills own the git flow)
+- `PreCompact` → `bd prime --stealth` — re-injects task state after context compaction
 
-`bd setup claude` has a known bug where it can set PreCompact to `bd sync` (deprecated command) instead of `bd prime`. Fix it:
+`bd setup claude` has known bugs: it may set the command to `bd prime` (missing `--stealth`) or `bd sync` (deprecated). Fix both hooks:
 
 ```bash
 python3 -c "
 import json
 p = '.claude/settings.json'
 s = json.load(open(p))
-fixed = False
-for h in s.get('hooks', {}).get('PreCompact', []):
-    for inner in h.get('hooks', []):
-        if inner.get('command') == 'bd sync':
-            inner['command'] = 'bd prime'
-            fixed = True
-print('Fixed: PreCompact corrected to bd prime' if fixed else 'OK: PreCompact already correct')
+for hook_type in ('SessionStart', 'PreCompact'):
+    for h in s.get('hooks', {}).get(hook_type, []):
+        for inner in h.get('hooks', []):
+            inner['command'] = 'bd prime --stealth'
+print('Hooks set to bd prime --stealth')
 json.dump(s, open(p, 'w'), indent=2)
 "
 ```
