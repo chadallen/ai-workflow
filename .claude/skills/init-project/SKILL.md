@@ -247,15 +247,14 @@ Created:
   ✓ .beads/ (initialized)
   ✓ Claude Code hooks (SessionStart, PreCompact)
 
-Next step: create your first tasks.
+Next step:
 
-Run /create-tasks in Claude Code. The agent will read your PRD and
-conversation context, propose a set of tasks in a scratch file
-(.beads/proposal.md), and wait for you to review and edit before
-creating anything.
+Run /clear to reset the context window, then /start-session to orient
+the agent on your project. Once in a session, use /create-tasks to
+break your first feature into tasks.
 
-Once tasks exist, use:
-  /start-session   — begin a session and pick up the next task
+The workflow from there:
+  /create-tasks    — plan work (do this first)
   /build-tasks     — run tasks autonomously with code review
   /end-session     — close tasks, update docs, push everything
 ```

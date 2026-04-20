@@ -255,9 +255,10 @@ Print:
 - Stale files deleted or moved
 - Any `TODO:` markers left in new docs that need user input
 - Next steps:
-  - `/start-session` to begin working
-  - `/create-tasks` when ready to plan the next feature
-  - `/build-tasks <epic-id>` to autonomously execute an existing epic
+  1. `/clear` — reset the context window
+  2. `/start-session` — orient the agent on your project (always do this first)
+  3. `/create-tasks` — plan the next feature (only after starting a session)
+  4. `/build-tasks <epic-id>` — autonomously execute an existing epic
 
 ---
 
