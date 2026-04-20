@@ -4,7 +4,7 @@ Let's create the world of autonomous vibe coding agents we deserve, so that AI c
 
 1. Agents need better memory
 2. Agents need small, well-defined tasks to work on
-3. Humans need need to be isolated from the "how" so they focus on the "what" 
+3. Humans need to be isolated from the "how" so they focus on the "what" 
 
 # The short version 
 
