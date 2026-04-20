@@ -203,9 +203,26 @@ Add them if missing.
 
 ## Step 9: Initial commit
 
+Stage and commit:
+
 ```bash
 git add CLAUDE.md plan.MD docs/ .beads/ .claude/ .gitignore
 git commit -m "chore: init project workflow"
+```
+
+Before pushing, check the remote:
+
+```bash
+git remote get-url origin 2>/dev/null || echo "NO_REMOTE"
+```
+
+- If the output is `NO_REMOTE`: tell the user no remote is configured and skip `git push`. They'll need to add one (`git remote add origin <url>`) and push manually.
+- If the URL contains `chadallen/claude-workflow`: **stop immediately.** Tell the user:
+  > This repo's origin still points to the claude-workflow template. Update it before pushing: `git remote set-url origin <your-repo-url>`
+  Do NOT push. Skip `git push` and `bd dolt push`.
+- Otherwise: push normally.
+
+```bash
 git push
 bd dolt push
 ```
