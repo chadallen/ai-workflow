@@ -180,7 +180,7 @@ Print:
   - To build autonomously: run `/build-tasks <epic-id> --auto`. Fresh subagents implement each task in order, a code reviewer checks the work, and tasks close automatically.
   - To work tasks manually: you're already in a session — just start working the first ready task.
 
-Do NOT offer to start building or begin implementation. Your job ends here. The user must explicitly invoke `/build-tasks` or `/start-session` themselves.
+Do NOT offer to start building or begin implementation. Your job ends here. The user must explicitly invoke `/build-tasks` themselves.
 
 ---
 
