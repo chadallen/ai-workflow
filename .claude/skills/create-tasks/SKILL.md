@@ -2,7 +2,7 @@
 name: create-tasks
 description: Turns recent conversation context into tasks (and an epic if the work warrants it). Writes a proposal to .beads/proposal.md for the user to review and edit, then creates the tasks on approval.
 when_to_use: Use after brainstorming a feature or set of changes in chat. Trigger phrases: "create tasks", "make tasks", "break this into tasks", "turn this into an epic", "/create-tasks".
-disable-model-invocation: true
+disable-model-invocation: false
 allowed-tools: Bash, Read, Write
 ---
 

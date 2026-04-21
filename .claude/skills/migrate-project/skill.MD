@@ -1,7 +1,7 @@
 ---
 name: migrate-project
 description: Sets up the three-file plus task workflow on any project. Detects what already exists and skips it — works on greenfield projects, partially set up projects, and projects with existing docs. One-time setup per project.
-disable-model-invocation: true
+disable-model-invocation: false
 allowed-tools: Bash, Read, Write
 ---
 

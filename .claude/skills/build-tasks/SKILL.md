@@ -3,7 +3,7 @@ name: build-tasks
 description: Autonomously builds tasks using fresh subagents per task with comprehensive code review (tests, linting, security, performance, simplification) after each one. Accepts an epic ID, one or more task IDs, or no argument to build the next ready task.
 when_to_use: Use when tasks are well-specified and can be implemented without real-time judgment. Trigger phrases: "build the epic", "run the tasks", "execute autonomously", "/build-tasks".
 argument-hint: "[epic-id | task-id ...]"
-disable-model-invocation: true
+disable-model-invocation: false
 allowed-tools: Bash, Read
 effort: high
 ---

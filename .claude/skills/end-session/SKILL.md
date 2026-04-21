@@ -2,7 +2,7 @@
 name: end-session
 description: Closes completed tasks, checks for ADR-worthy decisions, updates CLAUDE.md/PRD.md/plan.MD, commits all changes, and pushes to remote. Session is not complete until git push and bd dolt push both succeed.
 when_to_use: Use at the end of every coding session. Trigger phrases: "end session", "wrap up", "done for now", "let's stop here", "land the plane", "/end-session".
-disable-model-invocation: true
+disable-model-invocation: false
 allowed-tools: Bash, Read, Write
 ---
 

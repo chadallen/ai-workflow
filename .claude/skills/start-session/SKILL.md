@@ -2,7 +2,7 @@
 name: start-session
 description: Reads CLAUDE.md, PRD.md, plan.MD, and task state to orient the agent at the start of a coding session. Flags missing ADRs, surfaces ready tasks, and proposes a session plan for user approval.
 when_to_use: Use at the beginning of every coding session. Trigger phrases: "start session", "let's get started", "pick up where we left off", "new session", "what's next", "/start-session".
-disable-model-invocation: true
+disable-model-invocation: false
 allowed-tools: Bash, Read
 ---
 

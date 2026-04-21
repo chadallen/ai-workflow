@@ -2,7 +2,7 @@
 name: init-project
 description: Sets up a brand new project from a PRD. Checks for Claude Code initialization and PRD.md, then creates CLAUDE.md, plan.MD, initializes task tracking, and installs hooks. Ends by explaining how to use /create-tasks — the user runs that when ready.
 when_to_use: Use once at the start of a brand new project after adding PRD.md to the repo. Trigger phrases: "set up this project", "initialize the workflow", "new project setup", "/init-project".
-disable-model-invocation: true
+disable-model-invocation: false
 allowed-tools: Bash, Read, Write
 ---
 
