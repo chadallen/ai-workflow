@@ -92,25 +92,12 @@ bd update <task-id> --claim --json
 
 ### 3.3 Dispatch implementer subagent
 
-Spawn a fresh general-purpose subagent with:
+Dispatch the `implementer` subagent (defined in `.claude/agents/implementer.MD`). Pass:
 
 - The full task `description` field (from `bd show <task-id> --json`).
 - The task `design` field.
 - The task `acceptance` criteria.
 - The parent epic ID and title if one exists (check `parent_id` in the task).
-
-Instructions for the subagent:
-
-- Read CLAUDE.md before starting.
-- Implement exactly as specified in the description.
-- The `design` field contains the architectural context relevant to this task — read it carefully before writing any code.
-- If you need broader context beyond the design field (e.g., a judgment call about an architectural pattern) and the task has a parent epic, run `bd show <epic-id> --json` to read the epic's description.
-- If you REALLY NEED need broader context, you can read plan.MD and PRD.md, but try to LIMIT reading to the RELEVANT sections — you don't want to get lost in unrelated details.
-- Write tests for any non-trivial logic you implement, even if the task spec doesn't explicitly say to. Check CLAUDE.md for the test command — if no test setup exists in the project at all, note it and skip. Otherwise, default to writing tests.
-- Commit frequently with the task ID in parens: `git commit -m "<message> (<task-id>)"`.
-- If any step is ambiguous or blocked, stop and report — do NOT guess.
-- Run tests and confirm they pass before reporting back.
-- Report: files changed, tests added, any deviations from the spec.
 
 ### 3.4 Code review
 
@@ -125,7 +112,7 @@ If `NEEDS_CHANGES`: go to 3.5.
 
 ### 3.5 Fix loop
 
-Dispatch a fresh fix subagent with:
+Dispatch a fresh `implementer` subagent with:
 
 - The specific issues from the code review.
 - File:line references.

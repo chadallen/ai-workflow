@@ -2,7 +2,7 @@
 name: code-reviewer
 description: Runs a comprehensive code review using parallel subagents — spec compliance, tests, linting, security, code quality, test quality, performance, and simplification. Returns APPROVED or NEEDS_CHANGES with a prioritized summary. Invoked by build-tasks after each task; can also be invoked directly.
 tools: Read, Grep, Glob, Bash
-model: sonnet
+model: inherit
 effort: high
 maxTurns: 20
 ---
