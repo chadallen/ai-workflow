@@ -43,7 +43,13 @@ If unsure, default to an epic when there are 3 or more tasks. If there is NOT en
 
 ## Step 2: Draft the proposal
 
-Write a scratch file at `.beads/proposal.md` (create `.beads/` if it doesn't exist). This file is deleted before commit in Step 7.
+Delete the scratch file if it exists:
+
+```bash
+rm .beads/proposal.md
+```
+
+Write a fresh scratch file at `.beads/proposal.md` (create `.beads/` if it doesn't exist). 
 
 **Format:**
 

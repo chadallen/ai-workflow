@@ -10,6 +10,31 @@ allowed-tools: Bash, Read, Write
 
 Run this procedure exactly. Do NOT write any project code during this procedure. The session is NOT done until the final `git push` and `bd dolt push` succeed.
 
+## Step 0: Check for unprocessed proposal
+
+Before doing anything else, check if `.beads/proposal.md` exists:
+
+```bash
+ls .beads/proposal.md 2>/dev/null && echo "PROPOSAL_EXISTS" || echo "NO_PROPOSAL"
+```
+
+**If `PROPOSAL_EXISTS`** — tasks were planned but never created from this proposal. Creating the tasks now before ending the session preserves that work.
+
+Read `.beads/proposal.md` and create the tasks exactly as `/create-tasks` step 4 would:
+
+1. If the proposal includes an epic, create it first: `bd create "<title>" -t epic -p 1 --description="..." --json`
+2. Create each task with its description, design, acceptance, and parent: `bd create "<title>" -t task -p 1 --parent <epic-id> --description="..." --design="..." --acceptance="..." --json`
+3. Add dependencies: `bd dep add <dependent> <dependency>`
+4. Update plan.MD's active epic line if an epic was created.
+5. Delete the proposal: `rm .beads/proposal.md`
+6. Tell the user: "Found unprocessed proposal — created X tasks from it before ending session."
+
+Do NOT silently delete `proposal.md` without creating the tasks. If anything in the proposal is ambiguous or can't be parsed, stop and ask the user rather than guessing or skipping.
+
+**If `NO_PROPOSAL`** — continue to Step 1.
+
+---
+
 ## Step 1: Close completed tasks
 
 For each task completed this session:

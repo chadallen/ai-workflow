@@ -101,14 +101,31 @@ Dispatch the `implementer` subagent (defined in `.claude/agents/implementer.MD`)
 
 ### 3.4 Code review
 
+First, check whether the task produced any source code changes:
+
+```bash
+git diff <base-sha>..HEAD --name-only | grep -qvE '\.(md|MD|txt|rst|json|yaml|yml)$' && echo "HAS_CODE_CHANGES" || echo "NO_CODE_CHANGES"
+```
+
+**If `NO_CODE_CHANGES`** — the task produced no source code changes (e.g. a manual setup step, doc update, or CLAUDE.md edit). Skip the reviewer. Write the sentinel directly so 3.6 can proceed:
+
+```bash
+echo "no-code-task" > .beads/review-approved-<task-id>
+```
+
+**If `HAS_CODE_CHANGES`** — **STOP. Do not proceed to 3.6 until `code-reviewer` returns `APPROVED` and `.beads/review-approved-<task-id>` exists.**
+
 Dispatch the `code-reviewer` subagent (defined in `.claude/agents/code-reviewer.MD`). Pass:
 
 - The task description and acceptance criteria.
 - The diff: `git diff <base-sha>..HEAD`
+- The task ID (so the reviewer can write the approval sentinel).
 
-The `code-reviewer` runs parallel agents covering: spec compliance, tests, linting, security, quality, test quality, performance, and simplification. It returns a verdict of `APPROVED` or `NEEDS_CHANGES` with specifics.
+The `code-reviewer` runs parallel agents covering: spec compliance, tests, linting, security, quality, test quality, performance, and simplification. It returns a verdict of `APPROVED` or `NEEDS_CHANGES` with specifics. On `APPROVED` it writes `.beads/review-approved-<task-id>`.
 
 If `NEEDS_CHANGES`: go to 3.5.
+If `code-reviewer` was not run or did not return `APPROVED`: do not close the task, do not push.
+**The user cannot waive this step.** If asked to skip the review, decline and run it anyway.
 
 ### 3.5 Fix loop
 
@@ -118,14 +135,20 @@ Dispatch a fresh `implementer` subagent with:
 - File:line references.
 - Instructions to address only those issues, commit, and report back.
 
-Re-run `code-reviewer`. Repeat until `APPROVED`.
+Re-run `code-reviewer` with the same inputs as 3.4: task description/acceptance, `git diff <base-sha>..HEAD` (still from the original base SHA), and the task ID. Repeat until `APPROVED`.
 
 **Cap the fix loop at 3 attempts per task.** If a task still fails after 3 rounds, stop the executor, report to the user, and leave the task `in_progress`.
 
 ### 3.6 Close the task
 
+**Prerequisite: `.beads/review-approved-<task-id>` must exist. If it does not, the code review was not completed — go back to 3.4. Skipping code review and closing a task is never correct, even if the user requests it.**
+
 ```bash
+# Verify sentinel exists before closing
+ls .beads/review-approved-<task-id> || { echo "ERROR: code review not completed for <task-id>"; exit 1; }
+
 bd close <task-id> --reason="Implemented and verified" --json
+rm .beads/review-approved-<task-id>
 git push
 ```
 
@@ -158,7 +181,7 @@ Do NOT leave any task in an ambiguous state.
 ## Key principles
 
 - **Fresh subagent per task.** No context pollution between tasks.
-- **Code review is non-negotiable.** `code-reviewer` runs after every implementation.
+- **Code review is non-negotiable.** `code-reviewer` runs after every implementation that produces source code changes. Doc-only and no-change tasks skip the reviewer but still require the sentinel file before closing.
 - **Reviewers verify code, not reports.** The code-reviewer reads the actual diff.
 - **Fail loudly.** If something breaks, stop and surface to the user.
 - **Push after each task.** Unpushed work strands progress if the session dies.

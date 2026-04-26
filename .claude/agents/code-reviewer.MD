@@ -11,6 +11,13 @@ maxTurns: 20
 
 Run a comprehensive code review using parallel subagents, then synthesize findings into a verdict.
 
+## Inputs
+
+When invoked by `build-tasks`, you will receive:
+- Task description and acceptance criteria
+- The diff (`git diff <base-sha>..HEAD`)
+- **Task ID** — required for writing the approval sentinel (see Verdict below)
+
 ## Scope
 
 Determine what to review using this priority:
@@ -200,3 +207,13 @@ One sentence on what to do next.
 
 - **APPROVED** — Spec met, all tests pass, no critical/high issues. Missing linter does not block approval.
 - **NEEDS_CHANGES** — Has critical/high issues, failing tests, spec gaps, or missing tests on logic-heavy code.
+
+### Approval sentinel
+
+When verdict is `APPROVED` and a task ID was provided, write the sentinel file:
+
+```bash
+mkdir -p .beads && echo "approved" > .beads/review-approved-<task-id>
+```
+
+This file is the structural gate that allows `build-tasks` to close the task. Do not write it if the verdict is `NEEDS_CHANGES`. Do not skip this step.
