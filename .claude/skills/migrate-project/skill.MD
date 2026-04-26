@@ -53,35 +53,19 @@ If everything exists and task tracking is initialized, this project may already 
 
 ---
 
-## Step 3: Build CLAUDE.md (if missing)
+## Step 3: Build CLAUDE.md (if missing or incomplete)
 
-If CLAUDE.md exists, read it. Check for content that doesn't belong — progress tracking, build status, session history — and migrate it to plan.MD (Step 5), then remove it from CLAUDE.md.
+Read `CLAUDE.example.md` from the repo root — it is the canonical template and defines the required sections and workflow conventions.
 
-If CLAUDE.md doesn't exist, construct it from available sources: existing README, package files (package.json, go.mod, Cargo.toml, pyproject.toml, etc.), and user description. Read code only if necessary and only after asking.
+**If CLAUDE.md exists:** Read it alongside CLAUDE.example.md. 
+- Migrate any content that doesn't belong (progress tracking, build status, session history) to plan.MD (Step 5), then remove it from CLAUDE.md.
+- Check that every section from CLAUDE.example.md is present. Add any missing sections, filling in `[TODO]` placeholders from the existing README, package files, or user description. Do not overwrite content that's already there.
 
-CLAUDE.md must contain:
-- Project description (1 paragraph)
-- Stack and key dependencies
-- Build, test, and run commands
-- Project structure overview
-- Coding conventions and patterns (infer from existing code if needed)
-- Secrets and environment variable policy
-- Standing behavioral instructions for the agent:
-  - Wait for approval before writing code
-  - Commit frequently with task IDs in parens: `git commit -m "<message> (<task-id>)"`
-  - Prompt the user when manual testing or decisions are needed
-  - Do not read scratch.md
+**If CLAUDE.md doesn't exist:** Copy CLAUDE.example.md as the starting point. Fill in every `[TODO]` placeholder from available sources: existing README, package files (package.json, go.mod, Cargo.toml, pyproject.toml, etc.), and user description. Read code only if necessary and only after asking.
 
-Add task tracking reference:
+Leave any placeholder you can't determine as `[TODO]` — don't ask the user, and don't guess.
 
-```
-## Task tracking
-
-Task tracking is via bd. Run `bd ready` for next tasks.
-Skills: /start-session, /end-session, /create-tasks, /build-tasks, /adr
-```
-
-CLAUDE.md must NOT contain progress tracking, session history, or implementation specs.
+CLAUDE.md must NOT contain progress tracking, session history, or implementation specs. Target length: under 80 lines.
 
 ---
 
@@ -266,7 +250,7 @@ Print:
 
 - **Detect before building.** Read what exists before constructing anything. Never overwrite existing docs without confirming with the user.
 - **Ask early, ask often.** This migration makes consequential decisions about project structure. Get input rather than guessing.
-- **Verbal beats code-reading.** Always prefer asking the user to describe something over reading code to infer it.
+- **Verbal beats code-reading.** Always prefer asking the user to describe something over reading code to infer it. But don't ask to resolve CLAUDE.md TODOs — leave them for subsequent agents to fill in naturally.
 - **Better sparse than wrong.** Use `TODO:` markers rather than hallucinating project details.
 - **Don't delete without asking.** Existing docs may have meaning even if they're redundant.
 - **Two commits is normal.** `bd init` auto-commits its own initialization. The migration lands as two commits: the `bd init` commit and the main migration commit. This is expected.

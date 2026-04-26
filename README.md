@@ -26,7 +26,7 @@ The basic workflow is `/start-session` → `/create-tasks` and/or `/build-tasks`
 
 **PRD.md** — Product managers, please take a moment to silently reflect: agents are the only developers who have ever read a PRD front to back. Even they grow weary of this toil. When something in this doc becomes working software they'll replace your garrulous prose with a code pointer. This is really the only doc you need to touch in this workflow.
 
-**CLAUDE.md** — If you're starting a new project just let Claude write this. Actually don't ever touch this. Agents will maintain it.
+**CLAUDE.md** — Seeded from `CLAUDE.example.md` (the template in this repo) and filled in by `/init-project` or `/migrate-project`. Don't edit it manually after that — agents maintain it every session.
 
 **plan.MD** — The big picture. Phases, what's active, what's next. Agents update it every session. The detailed task-level stuff is tracked as tasks. Don't touch this either.
 
@@ -127,7 +127,7 @@ Add your `PRD.md` to the folder. You can use the template provided or roll your 
 /init-project
 ```
 
-The skill reads your PRD, asks a few quick questions about your stack, creates CLAUDE.md and plan.MD, inits task tracking, and installs hooks. When it's done it tells you how to create your first tasks.
+The skill reads your PRD, fills in `CLAUDE.example.md` with your project details, creates CLAUDE.md and plan.MD, inits task tracking, and installs hooks. When it's done it tells you how to create your first tasks.
 
 ---
 

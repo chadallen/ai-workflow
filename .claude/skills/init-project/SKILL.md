@@ -57,58 +57,29 @@ If it exists and is updated from the template, read it in full before doing anyt
 
 ---
 
-## Step 3: Ask a few questions
+## Step 3: Create CLAUDE.md
 
-You need a small amount of information that isn't in the PRD to set up CLAUDE.md properly. Ask the user — don't try to infer from the PRD:
+Read `CLAUDE.example.md` from the repo root — it is the canonical template. Fill in every `[TODO:]` placeholder using the PRD:
 
-1. What's the primary language and framework?
-2. What are the build, run, and test commands?
-3. Are there any hard rules around secrets, data handling, or naming conventions the agent must never violate?
-4. Anything else the agent needs to know every session that the PRD doesn't cover?
-
-Keep it short. If the user says "figure it out from the PRD" for any question, that's fine — note it and move on.
-
----
-
-## Step 4: Create CLAUDE.md
-
-Build CLAUDE.md from the PRD and the user's answers. Follow these principles:
-
-**What belongs:**
-- One-paragraph "What This Is" distilled from the PRD vision section
-- Build, test, and run commands (from Step 3)
-- Stack constraints that differ from language/framework defaults
-- Hard rules: secrets policy, critical data rules, naming/branding rules (from Step 3)
-- Task tracking reference (see below)
+- **What This Is** — one paragraph distilled from the PRD vision section
+- **Stack** — primary language(s), frameworks, key dependencies
+- **Commands** — build, test, and run commands inferred from the PRD or any package/config files present
+- **Key Conventions** — hard naming rules, secrets policy, or critical data constraints mentioned in the PRD; remove the section entirely if nothing notable applies
 
 **What does NOT belong:**
-- PRD content — that lives in PRD.md, not here
+- PRD prose — that lives in PRD.md
 - Progress tracking or session history — that lives in plan.MD
 - Code style rules — those belong in linter config
-- Anything that only applies sometimes — that belongs in skill files
 
 **Target length:** Under 80 lines. If you're going over, you're including too much.
 
-**Style:**
-- "Don't X, do Y" — never leave a prohibition without a concrete alternative
-- Reserve emphasis (IMPORTANT, YOU MUST) for 2-3 rules that truly matter
+Leave any command you can't determine as `[TODO]` — subsequent agents will fill in the gaps naturally. Do not ask the user questions to resolve them.
 
-Always include this section at the end:
-
-```
-## Task Tracking
-
-Task tracking is via bd. Run `bd ready` for next tasks.
-Commits include the task ID: `git commit -m "<message> (<task-id>)"`
-
-Skills: /start-session, /end-session, /create-tasks, /build-tasks, /adr
-```
-
-Show the user the draft and wait for approval before writing it to disk.
+Show the user the filled-in draft and wait for approval before writing it to disk.
 
 ---
 
-## Step 5: Create plan.MD
+## Step 4: Create plan.MD
 
 Build plan.MD from the PRD's build sequence or feature roadmap:
 
@@ -150,7 +121,7 @@ Write this to disk without needing approval — it's scaffolding, not a decision
 
 ---
 
-## Step 6: Create docs/ structure
+## Step 5: Create docs/ structure
 
 ```bash
 mkdir -p docs/adr
@@ -160,7 +131,7 @@ This directory will hold Architecture Decision Records as they're created.
 
 ---
 
-## Step 7: Initialize task tracking
+## Step 6: Initialize task tracking
 
 ```bash
 bd init --quiet
@@ -199,7 +170,7 @@ json.dump(s, open(p, 'w'), indent=2)
 
 ---
 
-## Step 8: Add .gitignore entries
+## Step 7: Add .gitignore entries
 
 Ensure these are in `.gitignore`:
 
@@ -212,7 +183,7 @@ Add them if missing.
 
 ---
 
-## Step 9: Initial commit
+## Step 8: Initial commit
 
 Stage and commit:
 
@@ -233,7 +204,7 @@ bd dolt push
 
 ---
 
-## Step 10: Tell the user how to proceed
+## Step 9: Tell the user how to proceed
 
 Print a summary:
 
@@ -264,6 +235,7 @@ The workflow from there:
 ## Key principles
 
 - **Check prerequisites first.** Claude Code init and PRD.md must both exist before doing anything else.
-- **Ask, don't infer.** A few targeted questions to the user are cheaper than reading the whole codebase and guessing wrong.
+- **Template first.** Start from `CLAUDE.example.md` — the workflow conventions are pre-baked. Fill in the TODOs; don't rebuild from scratch.
 - **CLAUDE.md from the PRD, not the other way around.** The PRD is the source of truth. CLAUDE.md is a distillation of what the agent needs every session.
-- **Don't run /create-tasks.** Setup ends at Step 9. The user runs create-tasks when they're ready.
+- **Leave gaps rather than guess.** If a command or convention isn't in the PRD, leave it as `[TODO]`. Don't ask the user — subsequent agents will surface the gaps naturally.
+- **Don't run /create-tasks.** Setup ends at Step 8. The user runs create-tasks when they're ready.
