@@ -57,9 +57,11 @@ If it exists and is updated from the template, read it in full before doing anyt
 
 ---
 
-## Step 3: Create CLAUDE.md
+## Step 3: Write CLAUDE.md
 
-Read `CLAUDE.example.md` from the repo root — it is the canonical template. Fill in every `[TODO:]` placeholder using the PRD:
+Read `CLAUDE.example.md` from the repo root — it is the canonical template. If a `CLAUDE.md` already exists (e.g. from Claude Code's built-in `/init`), it will be replaced — `/init-project` is the authoritative setup step and any prior CLAUDE.md is a stub.
+
+Fill in every `[TODO:]` placeholder using the PRD:
 
 - **What This Is** — one paragraph distilled from the PRD vision section
 - **Stack** — primary language(s), frameworks, key dependencies

@@ -92,7 +92,7 @@ bd update <task-id> --claim --json
 
 ### 3.3 Dispatch implementer subagent
 
-Dispatch the `implementer` subagent (defined in `.claude/agents/implementer.MD`). Pass:
+Dispatch using `subagent_type: "implementer"` (the named agent defined in `.claude/agents/implementer.MD`). Do NOT use `general-purpose` — using the named type applies the agent's tool restrictions, turn limit, and system prompt automatically. Pass:
 
 - The full task `description` field (from `bd show <task-id> --json`).
 - The task `design` field.
@@ -115,7 +115,7 @@ echo "no-code-task" > .beads/review-approved-<task-id>
 
 **If `HAS_CODE_CHANGES`** — **STOP. Do not proceed to 3.6 until `code-reviewer` returns `APPROVED` and `.beads/review-approved-<task-id>` exists.**
 
-Dispatch the `code-reviewer` subagent (defined in `.claude/agents/code-reviewer.MD`). Pass:
+Dispatch using `subagent_type: "code-reviewer"` (the named agent defined in `.claude/agents/code-reviewer.MD`). Do NOT use `general-purpose`. Pass:
 
 - The task description and acceptance criteria.
 - The diff: `git diff <base-sha>..HEAD`
@@ -129,7 +129,7 @@ If `code-reviewer` was not run or did not return `APPROVED`: do not close the ta
 
 ### 3.5 Fix loop
 
-Dispatch a fresh `implementer` subagent with:
+Dispatch a fresh `implementer` subagent (`subagent_type: "implementer"`) with:
 
 - The specific issues from the code review.
 - File:line references.
