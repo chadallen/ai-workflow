@@ -42,6 +42,8 @@ If `bd prime` already ran via hook, you have most of this. Otherwise run:
 - `bd blocked --json` — blocked tasks
 - If plan.MD notes an active epic, run `bd list --parent <epic-id> --json` to see all tasks in the epic and their status
 
+Also run `bd list --assignee="$(git config user.name)" --status=open --json` to find tasks explicitly assigned to the current user. Surface these in the session plan — they represent things the user chose to own personally rather than delegate to an agent.
+
 If `.beads/` doesn't exist, stop. Suggest running `/migrate-project`.
 
 **Context check:** Review the ready tasks' `description` and `design` fields. If they provide enough context to understand the work, skip PRD.md. If the tasks reference product requirements, acceptance criteria, or features that aren't clear from the task fields alone, read the relevant section of PRD.md (not the whole file if you can identify the section). Only read PRD.md in full as a last resort.
@@ -53,9 +55,10 @@ Print for the user:
 1. **Last session recap** — 2-3 sentences from plan.MD's most recent Current Status entry.
 2. **Active epic status** — If there's an active epic noted in plan.MD: count of open/in_progress/closed tasks. Example: "`enzo-12` (Phase 6): 2 closed, 1 in progress, 4 open."
 3. **Next ready task(s)** — Top 1-3 tasks from `bd ready`, each with ID and title.
-4. **Proposed focus** — What you recommend working on this session. Default to the highest-priority ready task. If the remaining tasks in the active epic are well-specified, mention that `/build-tasks <epic-id>` could run them autonomously.
-5. **Missing ADRs** — If Step 3 found any undocumented architectural decisions from recent sessions, list them here. Offer to create them before starting new work.
-6. **Blockers or questions** — Anything from plan.MD's Known Issues, from `bd blocked`, or anything ambiguous where you want clarification before starting.
+4. **Your tasks** — Any open tasks assigned to the user (`--assignee=chad`). List each with ID and title. These are human-owned — don't claim or work them without being asked.
+5. **Proposed focus** — What you recommend working on this session. Default to the highest-priority ready task. If the remaining tasks in the active epic are well-specified, mention that `/build-tasks <epic-id>` could run them autonomously.
+6. **Missing ADRs** — If Step 3 found any undocumented architectural decisions from recent sessions, list them here. Offer to create them before starting new work.
+7. **Blockers or questions** — Anything from plan.MD's Known Issues, from `bd blocked`, or anything ambiguous where you want clarification before starting.
 7. **Estimated scope** — Rough sense of how much fits in this session.
 
 ## Step 6: Wait
