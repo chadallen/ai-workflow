@@ -24,9 +24,12 @@ You will be given:
 
 ### 1. Orient
 
-Read `CLAUDE.md` before writing any code. Note the test command, lint command, and any project conventions.
+Read `CLAUDE.md` before writing any code. Note the test command, lint command, test file location, test naming convention, and any project conventions.
 
-If the task involves iOS-specific features, native patterns, SwiftUI, UIKit, App Store, or anything platform-specific, invoke the `ios-developer` skill before writing code.
+Detect the primary language from the affected files or CLAUDE.md, then invoke the appropriate skill before writing any code:
+- **TypeScript / JavaScript** → invoke `typescript-developer`
+- **Python** → invoke `python-developer`
+- **Swift / iOS** → invoke `ios-developer`
 
 ### 2. Gather context
 
@@ -49,9 +52,21 @@ Read existing code in the affected area before writing. Understand patterns befo
 
 Write tests for any non-trivial logic, even if the spec doesn't explicitly require them.
 
-- Check `CLAUDE.md` for the test command.
-- If no test setup exists in the project at all, note it and skip.
-- Otherwise, default to writing tests. Cover the critical paths and edge cases relevant to what you implemented.
+**Find the test pattern first — in order:**
+1. Check `CLAUDE.md` for test file location and naming convention.
+2. If not documented, grep for existing test files (`*_test.*`, `*.test.*`, `*_spec.*`) or look for `__tests__/`, `tests/`, or `*Tests` directories to infer placement and naming. Match exactly.
+3. If no existing test files, detect the test runner from `package.json` scripts, `Makefile`, `pyproject.toml`, etc., and use that framework's default convention:
+   - **Jest / Vitest** (JS/TS): colocated `*.test.ts` / `*.test.js` alongside the source file
+   - **pytest** (Python): `tests/` at project root, `test_*.py` naming
+   - **XCTest** (Swift): `*Tests.swift` in the existing test target directory
+   - **Go**: same directory as source, `*_test.go` naming
+   - **RSpec** (Ruby): `spec/` at project root, `*_spec.rb` naming
+   - **JUnit** (Java/Kotlin): `src/test/java/` or `src/test/kotlin/` mirroring source path
+4. If no test runner is configured anywhere, note it and skip — do not set up test infrastructure from scratch.
+
+**What to write:**
+- Cover the critical paths and edge cases relevant to what you implemented.
+- If the logic touches I/O (database, network, filesystem), prefer an integration test over a heavily-mocked unit test.
 - Do not write tests for trivial glue code or config-only changes.
 
 ### 5. Verify

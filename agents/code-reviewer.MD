@@ -29,6 +29,17 @@ Determine what to review using this priority:
 
 ## Instructions
 
+### 0. Invoke language skill
+
+Before launching subagents, detect the primary language from the diff and invoke the appropriate skill:
+- **TypeScript / JavaScript** → invoke `typescript-developer`
+- **Python** → invoke `python-developer`
+- **Swift / iOS** → invoke `ios-developer`
+
+Apply the domain knowledge from that skill when synthesizing findings — especially Code Quality (Agent 5) and Test Quality (Agent 6) results.
+
+### Launch agents
+
 Launch all agents in parallel using a single message with multiple Task tool calls.
 
 ### Agent 1: Spec Compliance

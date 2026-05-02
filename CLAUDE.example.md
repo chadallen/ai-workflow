@@ -23,6 +23,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 [TODO]
 ```
 
+## Tests
+
+**File location:** [TODO: where test files live — e.g., `__tests__/` directories alongside source, root-level `tests/`, colocated `*.test.ts` files, or `*Tests.swift` targets]
+**Naming convention:** [TODO: e.g., `FooTests.swift`, `foo.test.ts`, `test_foo.py`]
+
 ## Key Conventions
 
 [TODO: Naming rules, hard constraints, or patterns specific to this project. Remove this section if nothing notable applies.]
