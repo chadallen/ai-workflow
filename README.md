@@ -46,11 +46,22 @@ The basic workflow is `/start-session` → `/create-tasks` and/or `/build-tasks`
 | `/adr` | Creates an Architecture Decision Record. Usually invoked by other skills, not directly. |
 | `/end-session` | End of a session. Closes tasks, checks for ADR-worthy decisions, updates docs, pushes everything. |
 
+### Language skills
+
+The `implementer` and `code-reviewer` agents automatically invoke a language skill at the start of each task based on the files being touched. You don't invoke these directly.
+
+| Skill | Language | What it adds |
+|---|---|---|
+| `typescript-developer` | TypeScript / JavaScript | Strict typing discipline, async pitfalls, Jest/Vitest test conventions, common review catches |
+| `python-developer` | Python | Type hints, pytest conventions, asyncio patterns, common pitfalls (mutable defaults, broad excepts) |
+| `ios-developer` | Swift / iOS | SwiftUI patterns, XCTest conventions, App Store compliance, Apple platform integrations |
+
 
 > **Want these skills available in all your projects?** Copy them to your global Claude config once:
 > ```bash
 > cp -r .claude/skills/* ~/.claude/skills/
 > cp .claude/agents/code-reviewer.MD ~/.claude/agents/
+> cp .claude/agents/implementer.MD ~/.claude/agents/
 > ```
 > After that you don't need to clone this repo into each project.
 
@@ -107,6 +118,7 @@ That's it. No copying required. If you later want the skills available globally 
 ```bash
 cp -r .claude/skills/* ~/.claude/skills/
 cp .claude/agents/code-reviewer.MD ~/.claude/agents/
+cp .claude/agents/implementer.MD ~/.claude/agents/
 ```
 
 ### 3a. Linters (install when you need them)
