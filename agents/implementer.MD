@@ -19,6 +19,15 @@ You will be given:
 - **Design** — architectural context for this task; read it carefully before writing any code
 - **Acceptance criteria** — the checklist you must satisfy
 - **Epic ID and title** (if the task has a parent epic)
+- **Siblings** (if running in parallel) — other tasks in the same frontier, with the files they own
+
+## Siblings
+
+If a `## Siblings` section is present in your prompt, you are running in parallel with other implementer agents on the same git branch. Respect these rules:
+
+- **Do not touch sibling-owned files.** If you discover you need to modify a file a sibling owns, stop and report — do not proceed.
+- **Commit atomically and early.** Your sibling's test run will see your uncommitted changes and may fail to compile. Commit a working state before your sibling attempts to build. If you must make incremental commits, ensure each one compiles.
+- **Do not rebase or amend.** Push is handled by the orchestrator after all siblings complete.
 
 ## Steps
 
