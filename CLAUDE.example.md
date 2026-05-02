@@ -46,7 +46,7 @@ Session loop: `/start-session` → work or `/build-tasks` → `/end-session` →
 
 ## Agents
 
-**`implementer`** — Implements one task from its spec. Reads CLAUDE.md first, gathers context from the task `design` field, writes tests, commits with task ID in every message.
+**`implementer`** — Implements one task from its spec. Reads CLAUDE.md first, gathers context from the task `design` field, writes tests, commits with task ID in every message. May run in parallel with sibling agents on the same frontier — respects file-ownership boundaries and commits atomically so siblings' builds don't break.
 
 **`code-reviewer`** — Runs 8 parallel subagents (spec compliance, tests, linting, security, code quality, test quality, performance, simplification). Returns `APPROVED` or `NEEDS_CHANGES`. Invoked by `/build-tasks` after every task; never skipped.
 

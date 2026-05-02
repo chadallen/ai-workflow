@@ -42,7 +42,7 @@ The basic workflow is `/start-session` → `/create-tasks` and/or `/build-tasks`
 | `/migrate-project` | One-time setup for existing projects. Cleans up docs, inits task tracking, imports tasks. |
 | `/start-session` | Beginning of a session. Reads docs and task state, flags missing ADRs, proposes a plan. |
 | `/create-tasks` | Turns a conversation into tasks. Writes a proposal for you to review, creates tasks on approval. Tip: once it has the proposal open, you can just keep adding to it: "add another task to make all of the buttons blue." After the PRD is written, this is your other main human touch point with the workflow.|
-| `/build-tasks` | Will ask you what tasks to work on. Sub-agents write code and other sub-agents review. You can walk away if you the agents have full bypass permissions. |
+| `/build-tasks` | Tasks with no dependencies between them run in parallel as siblings (up to 3 at a time). Sub-agents write code, other sub-agents review. You can walk away if the agents have full bypass permissions. |
 | `/adr` | Creates an Architecture Decision Record. Usually invoked by other skills, not directly. |
 | `/end-session` | End of a session. Closes tasks, checks for ADR-worthy decisions, updates docs, pushes everything. |
 
@@ -187,7 +187,7 @@ Agent writes a proposal to `.beads/proposal.md` — tasks with descriptions, des
 /build-tasks <task-id>       # one specific task
 ```
 
-Fresh subagent per task, comprehensive code review after each one (tests, linting, security, performance, simplification), fixes issues, closes task, moves on. Use `--auto` to walk away completely.
+Tasks with no dependencies between them form a frontier and run as siblings in parallel (up to 3 at a time) — each gets its own implementer agent, and reviewers run in parallel too. Fresh subagent per task, comprehensive code review (tests, linting, security, performance, simplification), fixes issues, closes task, moves on. Use `--auto` to walk away completely.
 
 ### Working task by task (conversational mode)
 
