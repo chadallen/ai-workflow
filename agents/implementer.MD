@@ -26,6 +26,8 @@ You will be given:
 
 Read `CLAUDE.md` before writing any code. Note the test command, lint command, and any project conventions.
 
+If the task involves iOS-specific features, native patterns, SwiftUI, UIKit, App Store, or anything platform-specific, invoke the `ios-developer` skill before writing code.
+
 ### 2. Gather context
 
 The `design` field is your primary context source. Use it first.
