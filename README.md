@@ -1,3 +1,5 @@
+_I stopped using this because I made fork-pizza. Check out that repo instead. Or use these skills. Whatever._
+
 # A workflow for Claude coding with autonomous sub-agents
 
 Let's create the world of autonomous vibe coding agents we deserve, so that AI can provide for our material needs while we pursue the realization of our authentic selves. For that to happen we need to make some improvements around here:
